@@ -15,3 +15,5 @@ app.use(routes)
 app.listen(port, () => {
     console.log("Run at port 3000🚀")
 })
+
+export default app

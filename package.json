@@ -34,7 +34,7 @@
   "scripts": {
     "start": "npx tsc -w ",
     "dev": "npx nodemon",
-    "build": "tsc && cp env ./build/.env ",
+    "build": "tsc",
     "lint": "npx eslint ./src --ext .ts",
     "lint:fix": "npx eslint ./src --ext .ts --fix"
   }
