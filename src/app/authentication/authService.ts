@@ -2,6 +2,7 @@ import { ENV } from '@libs/config'
 import { UserModel } from '@model/user'
 import { AppError } from '@utils/HttpError'
 import { MESSAGES } from '@utils/Messages'
+import { REGEX } from '@utils/Regex'
 import * as bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
@@ -10,6 +11,10 @@ import { LoginAuthBodyDTO, RegisterAuthBodyDTO } from './authDTO'
 dotenv.config()
 
 export const registerService = async ({ email, name, password }: RegisterAuthBodyDTO) => {
+
+    if (!REGEX.email.test(email)) {
+        return AppError(MESSAGES.ERROR.INVALID.USER.EMAIL, 400)
+    }
 
     const user = await UserModel.findOne({ email })
     if (user) {

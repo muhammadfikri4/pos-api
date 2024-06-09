@@ -22,6 +22,7 @@ export const MESSAGES = {
             USER: {
                 PASSWORD: "Password is wrong",
                 PASSWORD_LENGTH: "Password must be at least 8 characters",
+                EMAIL: "Email is invalid"
             }
         }
     },
