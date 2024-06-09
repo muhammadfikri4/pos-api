@@ -4,7 +4,6 @@
 
 # production
 /build
-/dist
 
 # misc
 .DS_STORE
