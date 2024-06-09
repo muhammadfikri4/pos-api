@@ -1,3 +1,4 @@
+import { ENV } from '@libs/config';
 import dotenv from 'dotenv';
 import mongoose from "mongoose";
 
@@ -8,7 +9,11 @@ mongoose.set('strictQuery', true)
 
 export const dbconect = async () => {
     try {
-        await mongoose.connect(mongoURI as string)
+        await mongoose.connect(mongoURI as string, {
+            dbName: ENV.DB_NAME,
+            user: ENV.DB_USER,
+            pass: ENV.DB_PASSWORD
+        })
         console.log("DB connected🚀")
     } catch (error: unknown) {
         console.log((error as unknown as any).message)
