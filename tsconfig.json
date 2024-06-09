@@ -15,7 +15,9 @@
     "paths": {
       "@app/*": ["app/*"],
       "@model/*": ["config/model/*"],
-      "@utils/*": ["utils/*"]
+      "@utils/*": ["utils/*"],
+      "@libs/*": ["libs/*"],
+      "@interface/*": ["interface/*"]
     }
   },
   "include": ["src"]
