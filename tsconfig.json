@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    /* Language and Environment */
+    "baseUrl": "./src", /* Set to the root of your source files */
+    "target": "ES2017",
+    /* Modules */
+    "module": "commonjs",
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "incremental": true,
+    "tsBuildInfoFile": "./dist/.tsbuildinfo",
+    "paths": {
+      "@app/*": ["app/*"],
+      "@model/*": ["config/model/*"],
+      "@utils/*": ["utils/*"]
+    }
+  },
+  "include": ["src"]
+}
