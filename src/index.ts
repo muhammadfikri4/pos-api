@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 import express from 'express'
-import { ENV } from 'libs'
 import { dbconect } from './config'
+import { ENV } from './libs'
 import routes from './routes'
 
 const app = express()

@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
-import { ENV } from 'libs';
 import mongoose from "mongoose";
+import { ENV } from '../libs';
 
 dotenv.config()
 const mongoURI = process.env.DB_URL
