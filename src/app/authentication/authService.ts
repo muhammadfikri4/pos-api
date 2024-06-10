@@ -1,11 +1,11 @@
-import { UserModel } from '@model/user'
-import { AppError } from '@utils/HttpError'
-import { MESSAGES } from '@utils/Messages'
-import { REGEX } from '@utils/Regex'
 import * as bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
+import { UserModel } from '../../config/model/user'
 import { ENV } from '../../libs'
+import { AppError } from '../../utils/HttpError'
+import { MESSAGES } from '../../utils/Messages'
+import { REGEX } from '../../utils/Regex'
 import { LoginAuthBodyDTO, RegisterAuthBodyDTO } from './authDTO'
 
 dotenv.config()

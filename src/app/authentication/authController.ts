@@ -1,7 +1,7 @@
-import { HandleResponse } from "@utils/HandleResponse";
-import { HttpError } from "@utils/HttpError";
-import { MESSAGES } from "@utils/Messages";
 import { type Request, type Response } from "express";
+import { HandleResponse } from "../../utils/HandleResponse";
+import { HttpError } from "../../utils/HttpError";
+import { MESSAGES } from "../../utils/Messages";
 import { LoginAuthResponse } from "./authDTO";
 import { loginService, registerService } from "./authService";
 

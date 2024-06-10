@@ -1,5 +1,5 @@
-import authRoute from '@app/authentication/authRoute';
 import { Router, type Request, type Response } from "express";
+import authRoute from '../app/authentication/authRoute';
 
 const route = Router();
 
