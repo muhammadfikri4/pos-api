@@ -1,6 +1,6 @@
-import { ENV } from '@libs/config'
 import dotenv from 'dotenv'
 import express from 'express'
+import { ENV } from 'libs'
 import { dbconect } from './config'
 import routes from './routes'
 

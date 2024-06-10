@@ -1,5 +1,5 @@
-import { ENV } from '@libs/config';
 import dotenv from 'dotenv';
+import { ENV } from 'libs';
 import mongoose from "mongoose";
 
 dotenv.config()
