@@ -24,6 +24,9 @@ export const MESSAGES = {
                 PASSWORD_LENGTH: "Password must be at least 8 characters",
                 EMAIL: "Email is invalid"
             }
+        },
+        UNAUTHORIZED: {
+            AUTH: "If you are not logged in, please log in first"
         }
     },
     SUCCESS: {
