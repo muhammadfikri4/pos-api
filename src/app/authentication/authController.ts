@@ -44,6 +44,6 @@ export const loginController = async (req: Request, res: Response) => {
     if ((login as HttpError)?.message) {
         return HandleResponse(res, (login as HttpError).statusCode, (login as HttpError).code, (login as HttpError).message)
     }
-    res.cookie("access_token", login, { httpOnly: true })
-    HandleResponse<LoginAuthResponse>(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.USER, { access_token: login as string })
+    res.cookie("accessToken", login, { httpOnly: true })
+    HandleResponse<LoginAuthResponse>(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.USER, { accessToken: login as string })
 }

@@ -1,15 +1,17 @@
 import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
 import express from 'express'
-import { dbconect } from './config'
+// import { dbconect } from './config'
+import cors from 'cors'
 import { ENV } from './libs'
 import routes from './routes'
 
 const app = express()
 const port = ENV.PORT || 5000
 dotenv.config()
-dbconect()
+// dbconect()
 app.use(cookieParser())
+app.use(cors())
 app.use(express.json())
 
 app.use(routes)

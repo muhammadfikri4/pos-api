@@ -10,5 +10,5 @@ export interface LoginAuthBodyDTO {
 }
 
 export interface LoginAuthResponse {
-    access_token: string
+    accessToken: string
 }
