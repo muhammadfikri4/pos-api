@@ -8,6 +8,7 @@ export interface ProductModelTypes {
         name: string
     },
     createdAt?: Date,
+    stock: number,
     updateAt?: Date
 }
 

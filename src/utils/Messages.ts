@@ -31,7 +31,8 @@ export const MESSAGES = {
             EMAIL: "Email is required",
             PASSWORD: "Password is required",
             NAME: "Name is required",
-            IMAGE: "Image is required"
+            IMAGE: "Image is required",
+            STOCK: "Stock is required",
         },
         INTERNAL_SERVER: "Internal server error"
     },

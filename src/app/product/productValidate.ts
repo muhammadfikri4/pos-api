@@ -6,7 +6,7 @@ import { getCategoryById } from "../category/categoryRepo"
 import { ProductBodyDTO } from "./productDTO"
 import { getProductById, getProductByName } from "./productRepo"
 
-export const createProductValidate = async ({ name, categoryId, image }: ProductBodyDTO, size: number) => {
+export const createProductValidate = async ({ name, categoryId, image, stock }: ProductBodyDTO, size: number) => {
     if (!name) {
         return AppError(MESSAGES.ERROR.REQUIRED.NAME, 400, MESSAGE_CODE.BAD_REQUEST)
     }
@@ -27,6 +27,9 @@ export const createProductValidate = async ({ name, categoryId, image }: Product
     if (size > 5242880) {
         unlinkSync(image as string)
         return AppError(MESSAGES.ERROR.INVALID.IMAGE_SIZE, 400, MESSAGE_CODE.BAD_REQUEST)
+    }
+    if (!stock) {
+        return AppError(MESSAGES.ERROR.REQUIRED.STOCK, 400, MESSAGE_CODE.BAD_REQUEST)
     }
 
 
