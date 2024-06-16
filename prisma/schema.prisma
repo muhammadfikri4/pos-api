@@ -35,6 +35,7 @@ model Product {
   id         String   @id @unique @default(uuid())
   name       String
   price      Int
+  image      String
   category   Category @relation(fields: [categoryId], references: [id])
   categoryId String
   createdAt  DateTime @default(now())

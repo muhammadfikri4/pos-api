@@ -1,6 +1,7 @@
 export interface ProductBodyDTO {
     id?: string
     name?: string,
-    price?: number
+    price?: number,
+    image?: string
     categoryId?: string
 }

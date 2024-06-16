@@ -29,7 +29,8 @@ export const MESSAGES = {
         REQUIRED: {
             EMAIL: "Email is required",
             PASSWORD: "Password is required",
-            NAME: "Name is required"
+            NAME: "Name is required",
+            IMAGE: "Image is required"
         },
         INTERNAL_SERVER: "Internal server error"
     },

@@ -1,27 +1,29 @@
 import dotenv from 'dotenv'
+import { type Request } from 'express'
 import { AppError, HttpError } from '../../utils/HttpError'
 import { Meta } from '../../utils/Meta'
 import { ProductBodyDTO } from './productDTO'
 import { getProductMapper } from './productMapper'
 import { createProduct, deleteProduct, getProductById, getProducts, getProductsCount, updateProduct } from './productRepo'
-import { IFilterProduct } from './productTypes'
+import { IFilterProduct, ProductModelTypes } from './productTypes'
 import { createProductValidate, deleteProductValidate, updateProductValidate } from './productValidate'
 
 dotenv.config()
 
-export const createProductService = async ({ name, categoryId, price }: ProductBodyDTO) => {
-    const validate = await createProductValidate({ name, categoryId })
+export const createProductService = async ({ name, categoryId, price, image }: ProductBodyDTO, req: Request) => {
+    const validate = await createProductValidate({ name, categoryId, image })
     if ((validate as HttpError)?.message) {
         return AppError((validate as HttpError).message, (validate as HttpError).statusCode, (validate as HttpError).code)
     }
+    const url = `${req.protocol}://${req.get('host')}/${req.file?.path.replace("src/", "")}`
 
-    const created = await createProduct({ name, categoryId, price })
+    const created = await createProduct({ name, categoryId, price: Number(price), image: url })
     return created
 
 }
 
 export const getProductService = async ({ name, page = 1, perPage = 10 }: IFilterProduct) => {
-    const allProducts = await getProducts({ name, page, perPage })
+    const allProducts = await getProducts({ name, page, perPage }) as unknown as ProductModelTypes[]
     const [products, totalData] = await Promise.all([
         getProductMapper(allProducts),
         getProductsCount({ name })])

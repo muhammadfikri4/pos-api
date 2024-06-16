@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import express from 'express'
 // import { dbconect } from './config'
 import cors from 'cors'
+import path from 'path'
 import { ENV } from './libs'
 import routes from './routes'
 
@@ -13,6 +14,7 @@ dotenv.config()
 app.use(cookieParser())
 app.use(cors())
 app.use(express.json())
+app.use("/images", express.static(path.join(__dirname, "../src/images")));
 
 app.use(routes)
 

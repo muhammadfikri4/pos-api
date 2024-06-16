@@ -38,12 +38,14 @@ export const getProductById = async (id?: string) => {
     return await prisma.product.findUnique({ where: { id } })
 }
 
-export const createProduct = async ({ name, price, categoryId }: ProductBodyDTO) => {
+export const createProduct = async ({ name, price, categoryId, image }: ProductBodyDTO) => {
     return await prisma.product.create({
         data: {
             name: name as string,
             categoryId: categoryId as string,
-            price: price as number
+            price: price as number,
+            image: image as string
+
         }
     })
 }
