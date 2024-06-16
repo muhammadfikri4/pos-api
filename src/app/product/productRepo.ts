@@ -2,13 +2,14 @@ import prisma from "../../config";
 import { ProductBodyDTO } from "./productDTO";
 import { IFilterProduct } from "./productTypes";
 
-export const getProducts = async ({ name, page, perPage }: IFilterProduct) => {
+export const getProducts = async ({ name, page, perPage, categoryId }: IFilterProduct) => {
     return await prisma.product.findMany({
         where: {
             name: {
                 contains: name,
-                mode: 'insensitive'
-            }
+                mode: 'insensitive',
+            },
+            categoryId
         },
         include: {
             category: true

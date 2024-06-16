@@ -14,6 +14,7 @@ export interface ProductModelTypes {
 
 export interface IFilterProduct {
     name?: string,
+    categoryId?: string,
     page?: number,
     perPage?: number
 }

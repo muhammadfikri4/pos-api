@@ -41,8 +41,9 @@ export const updateProductValidate = async ({ name, id, image }: ProductBodyDTO,
     }
 
     const findProduct = await getProductByName({ name })
-    if (findProduct && findUnique && findProduct.id !== findUnique.id) {
-        return AppError(MESSAGES.ERROR.ALREADY.CATEGORY, 400, MESSAGE_CODE.BAD_REQUEST)
+
+    if (name && findProduct && findUnique && findProduct.id !== findUnique.id) {
+        return AppError(MESSAGES.ERROR.ALREADY.PRODUCT, 400, MESSAGE_CODE.BAD_REQUEST)
     }
 
     if (size > 5242880) {

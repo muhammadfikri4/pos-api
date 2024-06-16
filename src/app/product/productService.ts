@@ -1,3 +1,4 @@
+import { PATH_IMAGES } from 'config/path'
 import dotenv from 'dotenv'
 import { type Request } from 'express'
 import { unlinkSync } from 'fs'
@@ -12,21 +13,22 @@ import { createProductValidate, deleteProductValidate, updateProductValidate } f
 dotenv.config()
 
 export const createProductService = async ({ name, categoryId, price, stock }: ProductBodyDTO, req: Request) => {
-    const image = req.file?.path
+    const image = req.file?.filename
 
     const validate = await createProductValidate({ name, categoryId, image, stock }, req.file?.size as number)
     if ((validate as HttpError)?.message) {
         return AppError((validate as HttpError).message, (validate as HttpError).statusCode, (validate as HttpError).code)
     }
-    const url = `${req.protocol}://${req.get('host')}/${image?.replace("src/", "")}`
-
+    // const url = `${req.protocol}://${req.get('host')}/${image?.replace("src/", "")}`
+    const url = `${req.protocol}://${req.get('host')}/${PATH_IMAGES.products}/${image}`
+    console.log(url)
     const created = await createProduct({ name, categoryId, price: Number(price), image: url, stock: Number(stock) })
     return created
 
 }
 
-export const getProductService = async ({ name, page = 1, perPage = 10 }: IFilterProduct) => {
-    const allProducts = await getProducts({ name, page, perPage }) as unknown as ProductModelTypes[]
+export const getProductService = async ({ name, page = 1, perPage = 10, categoryId }: IFilterProduct) => {
+    const allProducts = await getProducts({ name, page, perPage, categoryId }) as unknown as ProductModelTypes[]
     const [products, totalData] = await Promise.all([
         getProductMapper(allProducts),
         getProductsCount({ name })])
@@ -39,8 +41,9 @@ export const updateProductService = async ({ id, name, categoryId, price, stock 
     if ((validate as HttpError)?.message) {
         return AppError((validate as HttpError).message, (validate as HttpError).statusCode, (validate as HttpError).code)
     }
-    const image = req.file?.path
-    const url = `${req.protocol}://${req.get('host')}/${image?.replace("src/", "")}`
+    const image = req.file?.filename
+    // const url = `${req.protocol}://${req.get('host')}/${image?.replace("src/", "")}`
+    const url = `${req.protocol}://${req.get('host')}/${PATH_IMAGES.products}/${image}`
 
     const updateFields: ProductBodyDTO = { id };
     const oldProduct = await getProductById(id)
@@ -52,6 +55,7 @@ export const updateProductService = async ({ id, name, categoryId, price, stock 
     if (categoryId === undefined) updateFields.categoryId = oldProduct?.categoryId
 
     if (image) {
+        // unlinkSync(oldProduct?.image.replace("http://localhost:5000/", "src/") as string);
         unlinkSync(oldProduct?.image.replace("http://localhost:5000/", "src/") as string);
     }
 

@@ -21,9 +21,9 @@ export const createProductController = async (req: Request, res: Response) => {
 
 export const getProductController = async (req: Request, res: Response) => {
     try {
-        const { name, page, perPage } = req.query as unknown as IFilterProduct
+        const { name, page, perPage, categoryId } = req.query as unknown as IFilterProduct
 
-        const products = await getProductService({ name, page: Number(page) || undefined, perPage: Number(perPage) || undefined });
+        const products = await getProductService({ name, page: Number(page) || undefined, perPage: Number(perPage) || undefined, categoryId: categoryId || undefined });
 
         return HandleResponse<ProductModelTypes[]>(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.PRODUCT.GET, products?.data as unknown as ProductModelTypes[], products?.meta)
     } catch (error) {

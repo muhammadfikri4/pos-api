@@ -15,7 +15,7 @@ export const updateCategoryValidate = async ({ name, id }: CategoryBodyDTO) => {
     }
 
     const findCategory = await getCategoryByName({ name })
-    if (findCategory && findUnique && findCategory.id !== findUnique.id) {
+    if (name && findCategory && findUnique && findCategory.id !== findUnique.id) {
         return AppError(MESSAGES.ERROR.ALREADY.CATEGORY, 400, MESSAGE_CODE.BAD_REQUEST)
     }
 }
