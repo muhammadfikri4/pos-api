@@ -1,5 +1,6 @@
 import dotenv from 'dotenv'
 import { type Request } from 'express'
+import { unlinkSync } from 'fs'
 import { AppError, HttpError } from '../../utils/HttpError'
 import { Meta } from '../../utils/Meta'
 import { ProductBodyDTO } from './productDTO'
@@ -10,12 +11,13 @@ import { createProductValidate, deleteProductValidate, updateProductValidate } f
 
 dotenv.config()
 
-export const createProductService = async ({ name, categoryId, price, image }: ProductBodyDTO, req: Request) => {
-    const validate = await createProductValidate({ name, categoryId, image })
+export const createProductService = async ({ name, categoryId, price }: ProductBodyDTO, req: Request) => {
+    const image = req.file?.path
+    const validate = await createProductValidate({ name, categoryId, image }, req.file?.size as number)
     if ((validate as HttpError)?.message) {
         return AppError((validate as HttpError).message, (validate as HttpError).statusCode, (validate as HttpError).code)
     }
-    const url = `${req.protocol}://${req.get('host')}/${req.file?.path.replace("src/", "")}`
+    const url = `${req.protocol}://${req.get('host')}/${image?.replace("src/", "")}`
 
     const created = await createProduct({ name, categoryId, price: Number(price), image: url })
     return created
@@ -31,17 +33,23 @@ export const getProductService = async ({ name, page = 1, perPage = 10 }: IFilte
     return { data: products, meta: Meta(page, perPage, totalData) }
 }
 
-export const updateProductService = async ({ id, name, categoryId, price }: ProductBodyDTO) => {
-    const validate = await updateProductValidate({ id, name, categoryId, price })
+export const updateProductService = async ({ id, name, categoryId, price }: ProductBodyDTO, req: Request) => {
+    const validate = await updateProductValidate({ id, name, categoryId, price, image: req.file?.path }, req.file?.size as number)
     if ((validate as HttpError)?.message) {
         return AppError((validate as HttpError).message, (validate as HttpError).statusCode, (validate as HttpError).code)
     }
+    const image = req.file?.path
+    const url = `${req.protocol}://${req.get('host')}/${image?.replace("src/", "")}`
+
     const updateFields: ProductBodyDTO = { id };
     const oldProduct = await getProductById(id)
     if (name !== undefined) updateFields.name = name;
     if (categoryId !== undefined) updateFields.categoryId = categoryId;
-    if (price !== undefined) updateFields.price = price;
+    if (price !== undefined) updateFields.price = Number(price);
+    if (image !== undefined) updateFields.image = url;
     if (categoryId === undefined) updateFields.categoryId = oldProduct?.categoryId
+
+    unlinkSync(oldProduct?.image.replace("http://localhost:5000/", "src/") as string);
 
     const updated = await updateProduct(updateFields)
     return updated

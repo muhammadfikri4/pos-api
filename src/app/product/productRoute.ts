@@ -6,7 +6,7 @@ const route = Router()
 
 route.post("/", upload.single("image"), createProductController)
 route.get("/", getProductController)
-route.put("/:id", updateProductController)
+route.put("/:id", upload.single("image"), updateProductController)
 route.delete("/:id", deleteProductController)
 
 export default route

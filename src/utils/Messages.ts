@@ -22,6 +22,7 @@ export const MESSAGES = {
                 EMAIL: "Email is invalid"
             },
             CATEGORY_ID: "Category ID is invalid",
+            IMAGE_SIZE: "Image size is too large, max 5mb"
         },
         UNAUTHORIZED: {
             AUTH: "If you are not logged in, please log in first"

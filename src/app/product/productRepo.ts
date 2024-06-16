@@ -50,13 +50,14 @@ export const createProduct = async ({ name, price, categoryId, image }: ProductB
     })
 }
 
-export const updateProduct = async ({ id, name, categoryId, price, }: ProductBodyDTO) => {
+export const updateProduct = async ({ id, name, categoryId, price, image }: ProductBodyDTO) => {
     return await prisma.product.update({
         where: { id },
         data: {
             name,
             categoryId,
             price,
+            image
         }
     })
 }

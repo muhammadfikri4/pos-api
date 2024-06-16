@@ -11,7 +11,7 @@ export const createProductController = async (req: Request, res: Response) => {
 
     const { name, price, categoryId } = req.body as ProductBodyDTO
 
-    const categoryCreation = await createProductService({ name, price, categoryId, image: req.file?.path }, req);
+    const categoryCreation = await createProductService({ name, price, categoryId }, req);
 
     if ((categoryCreation as HttpError)?.message) {
         return HandleResponse(res, (categoryCreation as HttpError).statusCode, (categoryCreation as HttpError).code, (categoryCreation as HttpError).message)
@@ -35,7 +35,7 @@ export const getProductController = async (req: Request, res: Response) => {
 export const updateProductController = async (req: Request, res: Response) => {
     const { id } = req.params
     const { name, categoryId, price } = req.body as ProductBodyDTO
-    const update = await updateProductService({ name, categoryId, price, id });
+    const update = await updateProductService({ name, categoryId, price, id }, req);
     if ((update as HttpError)?.message) {
         return HandleResponse(res, (update as HttpError).statusCode, (update as HttpError).code, (update as HttpError).message)
     }
