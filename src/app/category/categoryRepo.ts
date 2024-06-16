@@ -6,7 +6,8 @@ export const getCategories = async ({ name, page, perPage }: IFilterCategory) =>
     return await prisma.category.findMany({
         where: {
             name: {
-                contains: name
+                contains: name,
+                mode: 'insensitive'
             }
         },
         take: perPage,
