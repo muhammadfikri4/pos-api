@@ -17,7 +17,7 @@ app.use(express.json())
 app.use(routes)
 
 app.listen(port, () => {
-    console.log("Run at port 3000🚀")
+    console.log(`Run at port ${port}🚀`)
 })
 
 export default app
