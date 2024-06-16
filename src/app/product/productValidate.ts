@@ -25,10 +25,6 @@ export const updateProductValidate = async ({ name, id }: ProductBodyDTO) => {
         return AppError(MESSAGES.ERROR.NOT_FOUND.PRODUCT, 404, MESSAGE_CODE.NOT_FOUND)
     }
 
-    if (!name) {
-        return AppError(MESSAGES.ERROR.REQUIRED.NAME, 400, MESSAGE_CODE.BAD_REQUEST)
-    }
-
     const findProduct = await getProductByName({ name })
     if (findProduct && findUnique && findProduct.id !== findUnique.id) {
         return AppError(MESSAGES.ERROR.ALREADY.CATEGORY, 400, MESSAGE_CODE.BAD_REQUEST)

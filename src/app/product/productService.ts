@@ -3,7 +3,7 @@ import { AppError, HttpError } from '../../utils/HttpError'
 import { Meta } from '../../utils/Meta'
 import { ProductBodyDTO } from './productDTO'
 import { getProductMapper } from './productMapper'
-import { createProduct, deleteProduct, getProducts, getProductsCount, updateProduct } from './productRepo'
+import { createProduct, deleteProduct, getProductById, getProducts, getProductsCount, updateProduct } from './productRepo'
 import { IFilterProduct } from './productTypes'
 import { createProductValidate, deleteProductValidate, updateProductValidate } from './productValidate'
 
@@ -34,8 +34,14 @@ export const updateProductService = async ({ id, name, categoryId, price }: Prod
     if ((validate as HttpError)?.message) {
         return AppError((validate as HttpError).message, (validate as HttpError).statusCode, (validate as HttpError).code)
     }
+    const updateFields: ProductBodyDTO = { id };
+    const oldProduct = await getProductById(id)
+    if (name !== undefined) updateFields.name = name;
+    if (categoryId !== undefined) updateFields.categoryId = categoryId;
+    if (price !== undefined) updateFields.price = price;
+    if (categoryId === undefined) updateFields.categoryId = oldProduct?.categoryId
 
-    const updated = await updateProduct({ id, name, categoryId, price })
+    const updated = await updateProduct(updateFields)
     return updated
 }
 

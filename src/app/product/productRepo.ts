@@ -41,7 +41,7 @@ export const createProduct = async ({ name, price, categoryId }: ProductBodyDTO)
     return await prisma.product.create({
         data: {
             name: name as string,
-            categoryId,
+            categoryId: categoryId as string,
             price: price as number
         }
     })
@@ -59,7 +59,7 @@ export const updateProduct = async ({ id, name, categoryId, price, }: ProductBod
 }
 
 export const deleteProduct = async (id: string) => {
-    return await prisma.category.delete({
+    return await prisma.product.delete({
         where: {
             id
         }
