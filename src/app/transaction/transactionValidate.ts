@@ -1,23 +1,28 @@
 import { MESSAGE_CODE } from "../../utils/ErrorCode"
 import { AppError } from "../../utils/HttpError"
 import { MESSAGES } from "../../utils/Messages"
-import { getProductById } from "../product/productRepo"
 import { TransactionBodyDTO } from "./transactionDTO"
 // import { getProductById, getProductByName } from "./transactionRepo"
 
-export const createTransactionValidate = async ({ productId, quantity, customerEmail, customerName }: TransactionBodyDTO) => {
-    if (!productId) {
+export const createTransactionValidate = async ({ email, name, paymentMethod, details, totalAmount, totalQuantity }: TransactionBodyDTO) => {
+    if (!email) {
+        return AppError(MESSAGES.ERROR.REQUIRED.EMAIL, 400, MESSAGE_CODE.BAD_REQUEST)
+    }
+    if (!name) {
+        return AppError(MESSAGES.ERROR.REQUIRED.NAME, 400, MESSAGE_CODE.BAD_REQUEST)
+    }
+    if (!paymentMethod) {
         return AppError(MESSAGES.ERROR.REQUIRED.NAME, 400, MESSAGE_CODE.BAD_REQUEST)
     }
 
-    const findProduct = await getProductById(productId)
-    if (!findProduct) {
-        return AppError(MESSAGES.ERROR.NOT_FOUND.PRODUCT, 400, MESSAGE_CODE.BAD_REQUEST)
+    if (details.length < 1) {
+        return AppError(MESSAGES.ERROR.INVALID.PRODUCT_ITEM, 400, MESSAGE_CODE.BAD_REQUEST)
+    }
+    if (details.length < 1) {
+        return AppError(MESSAGES.ERROR.INVALID.PRODUCT_ITEM, 400, MESSAGE_CODE.BAD_REQUEST)
     }
 
-    if (!quantity) {
-        return AppError(MESSAGES.ERROR.REQUIRED.QUANTITY, 400, MESSAGE_CODE.BAD_REQUEST)
-    }
+
 
 
 

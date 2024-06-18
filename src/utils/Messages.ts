@@ -23,7 +23,8 @@ export const MESSAGES = {
                 EMAIL: "Email is invalid"
             },
             CATEGORY_ID: "Category ID is invalid",
-            IMAGE_SIZE: "Image size is too large, max 5mb"
+            IMAGE_SIZE: "Image size is too large, max 5mb",
+            PRODUCT_ITEM: "There must be at least 1 product item"
         },
         UNAUTHORIZED: {
             AUTH: "If you are not logged in, please log in first"
@@ -35,7 +36,10 @@ export const MESSAGES = {
             IMAGE: "Image is required",
             STOCK: "Stock is required",
             PRODUCT_ID: "Product ID is required",
-            QUANTITY: "Quantity is required"
+            QUANTITY: "Quantity is required",
+            PAYMENT_METHOD: "Payment Method is required",
+            TOTAL_QUANTITY: "Total Quantity is required",
+            TOTAL_AMOUNT: "Total Amount is required",
         },
         INTERNAL_SERVER: "Internal server error"
     },

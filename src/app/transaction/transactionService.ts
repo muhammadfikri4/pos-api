@@ -1,21 +1,39 @@
 import dotenv from 'dotenv'
+import { AppError, HttpError } from 'utils/HttpError'
+import { Meta } from 'utils/Meta'
 import { TransactionBodyDTO } from './transactionDTO'
-import { createTransaction } from './transactionRepo'
+import { getTransactionsMapper } from './transactionMapper'
+import { createTransaction, createTransactionDetail, getTransaction, getTransactionCount, getTransactionDetailByTransactionId } from './transactionRepo'
+import { IFilterTransaction, TransactionModelTypes } from './transactionTypes'
+import { createTransactionValidate } from './transactionValidate'
 
 dotenv.config()
 
-export const createTransactionService = async ([data]: TransactionBodyDTO[]) => {
+export const createTransactionService = async ({ details, email, name, paymentMethod }: TransactionBodyDTO) => {
 
-    // const validate = await createTransactionValidate({ productId, quantity, customerEmail, customerName })
-    // if ((validate as HttpError)?.message) {
-    //     return AppError((validate as HttpError).message, (validate as HttpError).statusCode, (validate as HttpError).code)
-    // }
-    // const findProduct = await getProductById(productId)
-    const created = await createTransaction(data)
-    return created
+    const validate = await createTransactionValidate({ email, details, name, paymentMethod })
+    if ((validate as HttpError)?.message) {
+        return AppError((validate as HttpError).message, (validate as HttpError).statusCode, (validate as HttpError).code)
+    }
+
+    const transactionCreation = await createTransaction({ email, name, paymentMethod, details })
+    const detailTransaction = details.map(detail => ({ ...detail, transactionId: transactionCreation.id }))
+    await createTransactionDetail({ details: detailTransaction })
+    return transactionCreation
+}
+
+export const getTransactionDetailByTransactionIdService = async (transactionId: string) => {
+    const transactionDetail = await getTransactionDetailByTransactionId(transactionId)
+
+    return transactionDetail
 
 }
 
+export const getTransactionService = async ({ email, name, page = 1, perPage = 10 }: IFilterTransaction) => {
+    const products = await getTransaction({ email, name, page, perPage });
+    const [transactions, totalTransaction] = await Promise.all([getTransactionsMapper(products as unknown as TransactionModelTypes[]), getTransactionCount({ email, name })])
+    return { data: transactions, meta: Meta(page, perPage, totalTransaction) }
+}
 // export const getProductService = async ({ name, page = 1, perPage = 10, categoryId }: IFilterProduct) => {
 //     const allProducts = await getProducts({ name, page, perPage, categoryId }) as unknown as ProductModelTypes[]
 //     const [products, totalData] = await Promise.all([
