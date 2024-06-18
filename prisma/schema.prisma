@@ -18,7 +18,7 @@ model User {
   name      String
   email     String
   password  String
-  role      String   @default("admin")
+  role      Role     @default(Admin)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -32,13 +32,63 @@ model Category {
 }
 
 model Product {
-  id         String   @id @unique @default(uuid())
-  name       String
-  price      Int
-  image      String
-  category   Category @relation(fields: [categoryId], references: [id])
-  categoryId String
-  stock      Int
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id          String        @id @unique @default(uuid())
+  name        String
+  price       Int
+  image       String
+  category    Category      @relation(fields: [categoryId], references: [id])
+  categoryId  String
+  stock       Int
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  Transaction Transaction[]
+}
+
+model Customer {
+  id           String        @id @unique @default(uuid())
+  name         String
+  email        String
+  number_phone Int
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  Transaction  Transaction[]
+}
+
+model Transaction {
+  id             String             @id @unique @default(uuid())
+  customer       Customer           @relation(fields: [customerId], references: [id])
+  customerId     String
+  total_amount   Decimal
+  product        Product            @relation(fields: [productId], references: [id])
+  quantity       Int
+  payment_method Payment_Method     @default(null)
+  productId      String
+  status         Status_Transaction
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+}
+
+model Income {
+  id        String   @id @unique @default(uuid())
+  nominal   Decimal
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  Admin
+  Owner
+}
+
+enum Status_Transaction {
+  PAID
+  UNPAID
+}
+
+enum Payment_Method {
+  QRIS
+  MANDIRI
+  BCA
+  CASH
+  null
 }

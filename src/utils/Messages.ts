@@ -3,6 +3,7 @@ export const MESSAGES = {
         USER: "User created successfully",
         CATEGORY: "Category created successfully",
         PRODUCT: "Product created successfully",
+        TRANSACTION: "Transaction created successfully",
     },
     ERROR: {
         NOT_FOUND: {
@@ -33,6 +34,8 @@ export const MESSAGES = {
             NAME: "Name is required",
             IMAGE: "Image is required",
             STOCK: "Stock is required",
+            PRODUCT_ID: "Product ID is required",
+            QUANTITY: "Quantity is required"
         },
         INTERNAL_SERVER: "Internal server error"
     },

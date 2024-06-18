@@ -47,6 +47,7 @@ export const loginService = async (
         id: user.id,
         name: user.name,
         email: user.email,
+        role: user.role
     }, ENV.JWT_SECRET as string)
 
     return token
