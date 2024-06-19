@@ -10,6 +10,7 @@ export const MESSAGES = {
             USER: "User not found",
             CATEGORY: "Category not found",
             PRODUCT: "Product not found",
+            TRANSACTION: "Transaction not found",
         },
         ALREADY: {
             USER: "User is already exists",
@@ -24,7 +25,8 @@ export const MESSAGES = {
             },
             CATEGORY_ID: "Category ID is invalid",
             IMAGE_SIZE: "Image size is too large, max 5mb",
-            PRODUCT_ITEM: "There must be at least 1 product item"
+            PRODUCT_ITEM: "There must be at least 1 product item",
+            TRANSACTION_ORDER: "Orders cannot exceed the stock amount"
         },
         UNAUTHORIZED: {
             AUTH: "If you are not logged in, please log in first"
@@ -54,6 +56,12 @@ export const MESSAGES = {
             GET: "Success to fetch product",
             UPDATE: "Success to update product",
             DELETE: "Success to delete product"
+        },
+        TRANSACTION: {
+            GET: "Success to fetch transaction",
+            UPDATE: "Success to update transaction",
+            DELETE: "Success to delete transaction",
+            PAID: "Success to paid transaction"
         }
 
     }

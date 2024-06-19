@@ -4,7 +4,7 @@ import { MESSAGE_CODE } from "../../utils/ErrorCode";
 import { HandleResponse } from "../../utils/HandleResponse";
 import { MESSAGES } from "../../utils/Messages";
 import { TransactionBodyDTO } from "./transactionDTO";
-import { createTransactionService, getTransactionDetailByTransactionIdService, getTransactionService } from "./transactionService";
+import { UpdateToPaidTransactionService, createTransactionService, getTransactionDetailByTransactionIdService, getTransactionService } from "./transactionService";
 import { IFilterTransaction } from "./transactionTypes";
 
 export const createTransactionController = async (req: Request, res: Response) => {
@@ -38,11 +38,21 @@ export const getTransactionController = async (req: Request, res: Response) => {
 
         const transactionService = await getTransactionService({ email, name, page, perPage })
 
-        return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.PRODUCT.GET, transactionService)
+        return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.TRANSACTION.GET, transactionService.data, transactionService.meta)
     } catch (error) {
         return HandleResponse(res, 500, MESSAGE_CODE.INTERNAL_SERVER_ERROR, MESSAGES.ERROR.INTERNAL_SERVER)
     }
 
+}
+
+export const UpdateToPaidTransactionController = async (req: Request, res: Response) => {
+
+    const { transactionId } = req.params
+    const update = await UpdateToPaidTransactionService({ id: transactionId as string });
+    if ((update as HttpError)?.message) {
+        return HandleResponse(res, (update as HttpError).statusCode, (update as HttpError).code, (update as HttpError).message)
+    }
+    return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.TRANSACTION.PAID);
 }
 
 // export const updateProductController = async (req: Request, res: Response) => {

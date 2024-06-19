@@ -9,8 +9,9 @@ import { IFilterProduct, ProductModelTypes } from "./productTypes";
 
 export const createProductController = async (req: Request, res: Response) => {
 
-    const { name, price, categoryId, stock } = req.body as ProductBodyDTO
 
+    const { name, price, categoryId, stock } = req.body as ProductBodyDTO
+    console.log(name)
     const categoryCreation = await createProductService({ name, price, categoryId, stock }, req);
 
     if ((categoryCreation as HttpError)?.message) {
@@ -21,7 +22,7 @@ export const createProductController = async (req: Request, res: Response) => {
 
 export const getProductController = async (req: Request, res: Response) => {
     try {
-        const { name, page, perPage, categoryId } = req.query as unknown as IFilterProduct
+        const { name, page, perPage, categoryId } = req.query as unknown as IFilterProduct;
 
         const products = await getProductService({ name, page: Number(page) || undefined, perPage: Number(perPage) || undefined, categoryId: categoryId || undefined });
 

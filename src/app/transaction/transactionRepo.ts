@@ -1,10 +1,11 @@
+import { StatusTransaction } from "@prisma/client";
 import prisma from "../../config";
-import { PaymentMethod, TransactionBodyDTO } from "./transactionDTO";
+import { PaymentMethod, TransactionBodyDTO, TransactionDetailDTO } from "./transactionDTO";
 import { IFilterTransaction } from "./transactionTypes";
 
 export const createTransaction = async ({ name, details, email, paymentMethod }: TransactionBodyDTO) => {
-    const totalAmount = details.reduce((acc, curr) => (acc) + (curr?.amount * curr?.quantity as number), 0)
-    const totalQuantity = details.reduce((acc, curr) => acc + (curr?.quantity as number), 0)
+    const totalAmount = details?.reduce((acc, curr) => (acc) + (curr?.amount * curr?.quantity as number), 0) as number
+    const totalQuantity = details?.reduce((acc, curr) => acc + (curr?.quantity as number), 0) as number
     return await prisma.transaction.create({
         data: {
             name: name as string,
@@ -19,7 +20,7 @@ export const createTransaction = async ({ name, details, email, paymentMethod }:
 
 export const createTransactionDetail = async ({ details }: TransactionBodyDTO) => {
     return await prisma.transactionDetail.createMany({
-        data: details
+        data: details as TransactionDetailDTO[]
     })
 }
 
@@ -67,6 +68,36 @@ export const getTransactionDetailByTransactionId = async (transactionId: string)
     return await prisma.transactionDetail.findMany({
         where: {
             transactionId
+        }
+    })
+}
+
+export const updateStatusTransaction = async (transactionId: string, status: StatusTransaction) => {
+    return await prisma.transaction.update({
+        where: {
+            id: transactionId
+        },
+        data: {
+            status
+        }
+    })
+}
+
+export const getTransactionById = async (id: string) => {
+    return await prisma.transaction.findUnique({
+        where: {
+            id
+        },
+        include: {
+            transactionDetails: true
+        }
+    })
+}
+
+export const getTransactionDetailById = async (id: string) => {
+    return await prisma.transactionDetail.findUnique({
+        where: {
+            id
         }
     })
 }

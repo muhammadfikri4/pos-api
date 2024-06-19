@@ -1,5 +1,5 @@
 export type Status = "UNPAID" | "PAID"
-export type PaymentMethod = "QRIS" | "BCA" | "MANDIRI" | "CASH"
+export type PaymentMethod = "QRIS" | "CASH"
 
 export interface TransactionDetailDTO {
     productId: string,
@@ -8,14 +8,14 @@ export interface TransactionDetailDTO {
     transactionId: string
 }
 export interface TransactionBodyDTO {
-
+    id?: string
     name?: string
     email?: string
     status?: Status
     totalQuantity?: number
     totalAmount?: number
     paymentMethod?: PaymentMethod
-    details: TransactionDetailDTO[]
+    details?: TransactionDetailDTO[]
 }
 
 export interface TransactionModel {
