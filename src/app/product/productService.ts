@@ -23,7 +23,7 @@ export const createProductService = async ({ name, categoryId, price, stock }: P
     }
     // const url = `${req.protocol}://${req.get('host')}/${image?.replace("src/", "")}`
     const url = `${req.protocol}://${req.get('host')}/${PATH_IMAGES.products}/${image}`
-    console.log(url)
+
     const created = await createProduct({ name, categoryId, price: Number(price), image: url, stock: Number(stock) })
     return created
 
@@ -53,9 +53,8 @@ export const updateProductService = async ({ id, name, categoryId, price, stock 
     if (categoryId !== undefined) updateFields.categoryId = categoryId;
     if (price !== undefined) updateFields.price = Number(price);
     if (image !== undefined) updateFields.image = url;
-    if (stock !== undefined) updateFields.stock = stock;
+    if (stock !== undefined) updateFields.stock = Number(stock);
     if (categoryId === undefined) updateFields.categoryId = oldProduct?.categoryId
-
     if (image) {
         // unlinkSync(oldProduct?.image.replace("http://localhost:5000/", "src/") as string);
         unlinkSync(oldProduct?.image.replace("http://localhost:5000/", "src/") as string);

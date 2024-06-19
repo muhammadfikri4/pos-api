@@ -4,7 +4,6 @@ export type PaymentMethod = "QRIS" | "CASH"
 export interface TransactionDetailDTO {
     productId: string,
     quantity: number,
-    amount: number,
     transactionId: string
 }
 export interface TransactionBodyDTO {

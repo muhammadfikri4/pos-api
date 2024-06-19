@@ -33,7 +33,7 @@ export const createTransactionDetailValidate = async (details: TransactionDetail
     const findMinus = result.find((item) => item === true)
     if (findMinus) {
 
-        return AppError(MESSAGES.ERROR.INVALID.TRANSACTION_ORDER, 400, MESSAGE_CODE.BAD_REQUEST)
+        return AppError(MESSAGES.ERROR.INVALID.TRANSACTION_ORDER, 400, MESSAGE_CODE.BAD_REQUEST);
     }
 
 }

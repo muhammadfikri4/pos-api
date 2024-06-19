@@ -1,10 +1,16 @@
 import { StatusTransaction } from "@prisma/client";
+import { getProductById } from "app/product/productRepo";
 import prisma from "../../config";
 import { PaymentMethod, TransactionBodyDTO, TransactionDetailDTO } from "./transactionDTO";
 import { IFilterTransaction } from "./transactionTypes";
 
 export const createTransaction = async ({ name, details, email, paymentMethod }: TransactionBodyDTO) => {
-    const totalAmount = details?.reduce((acc, curr) => (acc) + (curr?.amount * curr?.quantity as number), 0) as number
+    // const totalAmount = details?.reduce((acc, curr) => (acc) + (curr?.amount * curr?.quantity as number), 0) as number
+    const amounts = await Promise.all(details?.map(async (detail) => {
+        const findProduct = await getProductById(detail.productId)
+        return (findProduct?.price as number) * (detail?.quantity as number)
+    }) || []);
+    const totalAmount = amounts.reduce((acc, curr) => acc + curr, 0)
     const totalQuantity = details?.reduce((acc, curr) => acc + (curr?.quantity as number), 0) as number
     return await prisma.transaction.create({
         data: {
@@ -63,6 +69,7 @@ export const getTransactionCount = async ({ name, email }: IFilterTransaction) =
     })
 
 }
+
 
 export const getTransactionDetailByTransactionId = async (transactionId: string) => {
     return await prisma.transactionDetail.findMany({

@@ -4,7 +4,7 @@ import { MESSAGE_CODE } from "../../utils/ErrorCode";
 import { HandleResponse } from "../../utils/HandleResponse";
 import { MESSAGES } from "../../utils/Messages";
 import { TransactionBodyDTO } from "./transactionDTO";
-import { UpdateToPaidTransactionService, createTransactionService, getTransactionDetailByTransactionIdService, getTransactionService } from "./transactionService";
+import { UpdateToPaidTransactionService, createTransactionService, getTransactionByIdService, getTransactionDetailByTransactionIdService, getTransactionService } from "./transactionService";
 import { IFilterTransaction } from "./transactionTypes";
 
 export const createTransactionController = async (req: Request, res: Response) => {
@@ -53,6 +53,15 @@ export const UpdateToPaidTransactionController = async (req: Request, res: Respo
         return HandleResponse(res, (update as HttpError).statusCode, (update as HttpError).code, (update as HttpError).message)
     }
     return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.TRANSACTION.PAID);
+}
+
+export const getTransactionByIdController = async (req: Request, res: Response) => {
+    const { id } = req.params
+    const getById = await getTransactionByIdService(id)
+    if ((getById as HttpError)?.message) {
+        return HandleResponse(res, (getById as HttpError).statusCode, (getById as HttpError).code, (getById as HttpError).message)
+    }
+    return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.TRANSACTION.GET, getById)
 }
 
 // export const updateProductController = async (req: Request, res: Response) => {

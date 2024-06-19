@@ -1,10 +1,12 @@
 import dotenv from 'dotenv'
+import { MESSAGE_CODE } from '../../utils/ErrorCode'
 import { AppError, HttpError } from '../../utils/HttpError'
+import { MESSAGES } from '../../utils/Messages'
 import { Meta } from '../../utils/Meta'
-import { getProductById, updateProduct } from '../product/productRepo'
+import { getProductById, updateProductStock } from '../product/productRepo'
 import { TransactionBodyDTO, TransactionDetailDTO } from './transactionDTO'
 import { getTransactionsMapper } from './transactionMapper'
-import { createTransaction, createTransactionDetail, getTransaction, getTransactionById, getTransactionCount, getTransactionDetailById, getTransactionDetailByTransactionId, updateStatusTransaction } from './transactionRepo'
+import { createTransaction, createTransactionDetail, getTransaction, getTransactionById, getTransactionCount, getTransactionDetailByTransactionId, updateStatusTransaction } from './transactionRepo'
 import { IFilterTransaction, TransactionModelTypes } from './transactionTypes'
 import { createTransactionDetailValidate, createTransactionValidate, updateStatusToPaidTransactionValidate } from './transactionValidate'
 
@@ -53,16 +55,23 @@ export const UpdateToPaidTransactionService = async ({ id }: TransactionBodyDTO)
     }
 
     const findTransaction = await getTransactionById(id as string)
-    const promises = findTransaction?.transactionDetails.forEach(async (item) => {
-        const detailTransaction = await getTransactionDetailById(item.id)
-        const getProduct = await getProductById(detailTransaction?.productId)
-
-        await updateProduct({ id: item.productId, stock: (detailTransaction?.quantity as number) - (getProduct?.stock as number) })
-    })
+    const promises = findTransaction?.transactionDetails?.map(async (item) => {
+        const getProduct = await getProductById(item?.productId)
+        await updateProductStock(getProduct?.id as string, (getProduct?.stock as number) - (item?.quantity as number))
+        return []
+    }) || []
+    await Promise.all(promises)
     const updateTransaction = await updateStatusTransaction(id as string, 'PAID');
     return updateTransaction
 }
 
+export const getTransactionByIdService = async (id: string) => {
+    const transaction = await getTransactionById(id)
+    if (!transaction) {
+        return AppError(MESSAGES.ERROR.NOT_FOUND.TRANSACTION, 404, MESSAGE_CODE.NOT_FOUND)
+    }
+    return transaction
+}
 
 // export const getProductService = async ({ name, page = 1, perPage = 10, categoryId }: IFilterProduct) => {
 //     const allProducts = await getProducts({ name, page, perPage, categoryId }) as unknown as ProductModelTypes[]
