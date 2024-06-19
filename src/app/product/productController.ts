@@ -4,13 +4,14 @@ import { HandleResponse } from "../../utils/HandleResponse";
 import { HttpError } from "../../utils/HttpError";
 import { MESSAGES } from "../../utils/Messages";
 import { ProductBodyDTO } from "./productDTO";
-import { createProductService, deleteProductService, getProductService, updateProductService } from "./productService";
+import { createProductService, deleteProductService, getProductByIdService, getProductService, updateProductService } from "./productService";
 import { IFilterProduct, ProductModelTypes } from "./productTypes";
 
 export const createProductController = async (req: Request, res: Response) => {
 
-    const { name, price, categoryId, stock } = req.body as ProductBodyDTO
 
+    const { name, price, categoryId, stock } = req.body as ProductBodyDTO
+    console.log(name)
     const categoryCreation = await createProductService({ name, price, categoryId, stock }, req);
 
     if ((categoryCreation as HttpError)?.message) {
@@ -21,7 +22,7 @@ export const createProductController = async (req: Request, res: Response) => {
 
 export const getProductController = async (req: Request, res: Response) => {
     try {
-        const { name, page, perPage, categoryId } = req.query as unknown as IFilterProduct
+        const { name, page, perPage, categoryId } = req.query as unknown as IFilterProduct;
 
         const products = await getProductService({ name, page: Number(page) || undefined, perPage: Number(perPage) || undefined, categoryId: categoryId || undefined });
 
@@ -48,4 +49,13 @@ export const deleteProductController = async (req: Request, res: Response) => {
         return HandleResponse(res, (update as HttpError).statusCode, (update as HttpError).code, (update as HttpError).message)
     }
     return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.PRODUCT.DELETE)
+}
+
+export const getProductByIdController = async (req: Request, res: Response) => {
+    const { id } = req.params
+    const product = await getProductByIdService(id);
+    if ((product as HttpError)?.message) {
+        return HandleResponse(res, (product as HttpError).statusCode, (product as HttpError).code, (product as HttpError).message)
+    }
+    return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.PRODUCT.GET, product)
 }

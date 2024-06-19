@@ -2,10 +2,12 @@ import { PATH_IMAGES } from 'config/path'
 import dotenv from 'dotenv'
 import { type Request } from 'express'
 import { unlinkSync } from 'fs'
+import { MESSAGE_CODE } from 'utils/ErrorCode'
+import { MESSAGES } from 'utils/Messages'
 import { AppError, HttpError } from '../../utils/HttpError'
 import { Meta } from '../../utils/Meta'
 import { ProductBodyDTO } from './productDTO'
-import { getProductMapper } from './productMapper'
+import { getProductByIdMapper, getProductMapper } from './productMapper'
 import { createProduct, deleteProduct, getProductById, getProducts, getProductsCount, updateProduct } from './productRepo'
 import { IFilterProduct, ProductModelTypes } from './productTypes'
 import { createProductValidate, deleteProductValidate, updateProductValidate } from './productValidate'
@@ -71,4 +73,13 @@ export const deleteProductService = async (id: string) => {
 
     const deleted = await deleteProduct(id)
     return deleted
+}
+
+export const getProductByIdService = async (id: string) => {
+    const product = await getProductById(id)
+    if (!product) {
+        return AppError(MESSAGES.ERROR.NOT_FOUND.PRODUCT, 404, MESSAGE_CODE.NOT_FOUND)
+    }
+    const productById = getProductByIdMapper(product)
+    return productById
 }
