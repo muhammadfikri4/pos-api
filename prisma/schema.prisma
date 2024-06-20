@@ -55,6 +55,7 @@ model Transaction {
   transactionDetails TransactionDetail[]
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
+  History            History[]
 }
 
 model TransactionDetail {
@@ -75,6 +76,15 @@ model Income {
   updatedAt DateTime @updatedAt
 }
 
+model History {
+  id            String            @id @unique @default(uuid())
+  transaction   Transaction       @relation(fields: [transactionId], references: [id])
+  status        StatusTransaction
+  transactionId String
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+}
+
 enum Role {
   Admin
   Owner
@@ -83,6 +93,7 @@ enum Role {
 enum StatusTransaction {
   PAID
   UNPAID
+  PROCESS_BY_KITCHEN
 }
 
 enum PaymentMethod {

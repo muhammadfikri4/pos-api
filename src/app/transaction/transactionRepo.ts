@@ -108,3 +108,20 @@ export const getTransactionDetailById = async (id: string) => {
         }
     })
 }
+
+export const createHistoryBaseOnTransaction = (transactionId: string, status: StatusTransaction) => {
+    return prisma.history.create({
+        data: {
+            status,
+            transactionId
+        }
+    })
+}
+
+export const getHistoryByTransactionId = (transactionId: string) => {
+    return prisma.history.findMany({
+        where: {
+            transactionId: transactionId
+        }
+    })
+}

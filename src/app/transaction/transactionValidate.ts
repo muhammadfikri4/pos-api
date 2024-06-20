@@ -55,8 +55,6 @@ export const updateStatusToPaidTransactionValidate = async (id: string) => {
 
         return AppError(MESSAGES.ERROR.INVALID.TRANSACTION_ORDER, 400, MESSAGE_CODE.BAD_REQUEST)
     }
-
-
 }
 // export const updateProductValidate = async ({ name, id, image }: ProductBodyDTO, size: number) => {
 //     const findUnique = await getProductById(id)

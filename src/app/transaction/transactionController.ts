@@ -1,10 +1,11 @@
+import { StatusTransaction } from "@prisma/client";
 import { type Request, type Response } from "express";
 import { HttpError } from "utils/HttpError";
 import { MESSAGE_CODE } from "../../utils/ErrorCode";
 import { HandleResponse } from "../../utils/HandleResponse";
 import { MESSAGES } from "../../utils/Messages";
 import { TransactionBodyDTO } from "./transactionDTO";
-import { UpdateToPaidTransactionService, createTransactionService, getTransactionByIdService, getTransactionDetailByTransactionIdService, getTransactionService } from "./transactionService";
+import { UpdateToPaidTransactionService, createTransactionService, customUpdateStatusTransactionService, getHistoryByTransactionIdService, getTransactionByIdService, getTransactionDetailByTransactionIdService, getTransactionService } from "./transactionService";
 import { IFilterTransaction } from "./transactionTypes";
 
 export const createTransactionController = async (req: Request, res: Response) => {
@@ -62,6 +63,25 @@ export const getTransactionByIdController = async (req: Request, res: Response) 
         return HandleResponse(res, (getById as HttpError).statusCode, (getById as HttpError).code, (getById as HttpError).message)
     }
     return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.TRANSACTION.GET, getById)
+}
+
+export const getHistoryByTransactionIdController = async (req: Request, res: Response) => {
+    const { transactionId } = req.params
+    const getHistory = await getHistoryByTransactionIdService(transactionId)
+    if ((getHistory as HttpError)?.message) {
+        return HandleResponse(res, (getHistory as HttpError).statusCode, (getHistory as HttpError).code, (getHistory as HttpError).message)
+    }
+    return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.HISTORY.GET, getHistory)
+}
+
+export const customUpdateStatusTransactionController = async (req: Request, res: Response) => {
+    const { transactionId } = req.params
+    const { status } = req.body
+    const updateStatus = await customUpdateStatusTransactionService(transactionId, status as StatusTransaction)
+    if ((updateStatus as HttpError)?.message) {
+        return HandleResponse(res, (updateStatus as HttpError).statusCode, (updateStatus as HttpError).code, (updateStatus as HttpError).message)
+    }
+    return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.TRANSACTION.UPDATE_STATUS)
 }
 
 // export const updateProductController = async (req: Request, res: Response) => {
