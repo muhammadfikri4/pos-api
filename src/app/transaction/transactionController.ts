@@ -7,18 +7,32 @@ import { MESSAGES } from "../../utils/Messages";
 import { TransactionBodyDTO } from "./transactionDTO";
 import { UpdateToPaidTransactionService, createTransactionService, customUpdateStatusTransactionService, getHistoryByTransactionIdService, getTransactionByIdService, getTransactionDetailByTransactionIdService, getTransactionService } from "./transactionService";
 import { IFilterTransaction } from "./transactionTypes";
+import { createMidtransTransaction } from "./midtransService";
 
 export const createTransactionController = async (req: Request, res: Response) => {
-
-    const { name, email, paymentMethod, details } = req.body as TransactionBodyDTO
+    const { name, email, paymentMethod, details } = req.body as TransactionBodyDTO;
 
     const transactionCreation = await createTransactionService({ details, email, name, paymentMethod });
 
     if ((transactionCreation as HttpError)?.message) {
-        return HandleResponse(res, (transactionCreation as HttpError).statusCode, (transactionCreation as HttpError).code, (transactionCreation as HttpError).message)
+        return HandleResponse(res, (transactionCreation as HttpError).statusCode, (transactionCreation as HttpError).code, (transactionCreation as HttpError).message);
     }
-    return HandleResponse(res, 201, MESSAGE_CODE.SUCCESS, MESSAGES.CREATED.TRANSACTION)
-}
+
+    if (paymentMethod === 'CASH') {
+        return HandleResponse(res, 201, MESSAGE_CODE.SUCCESS, MESSAGES.CREATED.TRANSACTION, {
+            transaction: transactionCreation,
+            message: 'Transaction created and marked as paid'
+        });
+    } else if (paymentMethod === 'QRIS') {
+        const midtransResponse = await createMidtransTransaction(transactionCreation, details, name as string, email as string);
+        if ((midtransResponse as HttpError)?.message) {
+            return HandleResponse(res, 500, MESSAGE_CODE.INTERNAL_SERVER_ERROR, (midtransResponse as HttpError).message);
+        }
+        return HandleResponse(res, 201, MESSAGE_CODE.SUCCESS, MESSAGES.CREATED.TRANSACTION, midtransResponse);
+    } else {
+        return HandleResponse(res, 400, MESSAGE_CODE.BAD_REQUEST, 'Invalid payment method');
+    }
+};
 
 export const getTransactionDetailsByTransactionIdController = async (req: Request, res: Response) => {
     try {

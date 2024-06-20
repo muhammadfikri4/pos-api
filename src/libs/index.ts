@@ -11,5 +11,7 @@ export const ENV = {
     DB_PASSWORD: process.env.DB_PASSWORD,
     CLOUD_NAME: process.env.CLOUD_NAME,
     API_KEY: process.env.API_KEY,
-    API_SECRET: process.env.API_SECRET
+    API_SECRET: process.env.API_SECRET,
+    MIDTRANS_SERVER_KEY: process.env.MIDTRANS_SERVER_KEY,
+    MIDTRANS_CLIENT_KEY: process.env.MIDTRANS_CLIENT_KEY
 }
