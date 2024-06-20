@@ -10,7 +10,5 @@ route.get("/", getTransactionController)
 route.get("/history/:transactionId", getHistoryByTransactionIdController)
 route.put("/paid/:transactionId", UpdateToPaidTransactionController)
 route.put("/status/:transactionId", customUpdateStatusTransactionController)
-// route.put("/:id", updateProductController)
-// route.delete("/:id", deleteProductController)
 
 export default route
