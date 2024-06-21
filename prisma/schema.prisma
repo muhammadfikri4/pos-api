@@ -52,10 +52,14 @@ model Transaction {
   paymentMethod      PaymentMethod
   totalQuantity      Int
   totalAmount        Int
+  settlementTime     String?
+  signatureKey       String?
+  serialNumber       Int                 @unique @default(autoincrement())
   transactionDetails TransactionDetail[]
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
   History            History[]
+  Income             Income[]
 }
 
 model TransactionDetail {
@@ -70,10 +74,12 @@ model TransactionDetail {
 }
 
 model Income {
-  id        String   @id @unique @default(uuid())
-  nominal   Decimal
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String      @id @unique @default(uuid())
+  nominal       Int
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  transactionId String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }
 
 model History {

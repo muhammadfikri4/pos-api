@@ -79,13 +79,15 @@ export const getTransactionDetailByTransactionId = async (transactionId: string)
     })
 }
 
-export const updateStatusTransaction = async (transactionId: string, status: StatusTransaction) => {
+export const updateStatusTransaction = async (transactionId: string, status: StatusTransaction, settlementTime?: string, signatureKey?: string) => {
     return await prisma.transaction.update({
         where: {
             id: transactionId
         },
         data: {
-            status
+            status,
+            settlementTime: settlementTime ? settlementTime : null,
+            signatureKey: signatureKey ? signatureKey : null
         }
     })
 }
@@ -122,6 +124,15 @@ export const getHistoryByTransactionId = (transactionId: string) => {
     return prisma.history.findMany({
         where: {
             transactionId: transactionId
+        }
+    })
+}
+
+export const createIncomeByTransaction = (transactionId: string, nominal: number) => {
+    return prisma.income.create({
+        data: {
+            nominal,
+            transactionId
         }
     })
 }

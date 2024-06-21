@@ -3,13 +3,16 @@ import { TransactionModelTypes } from "./transactionTypes";
 export const getTransactionsMapper = (transactions: TransactionModelTypes[]) => {
 
     return transactions.map(transaction => {
-        const { id, name, email, paymentMethod, status, totalQuantity, totalAmount, createdAt, updatedAt, transactionDetails } = transaction
+        const { id, name, email, paymentMethod, status, totalQuantity, totalAmount, createdAt, updatedAt, transactionDetails, serialNumber, settlementTime, signatureKey } = transaction
         return {
             id,
             name,
             email,
             paymentMethod,
             status,
+            serialNumber,
+            settlementTime,
+            signatureKey,
             totalQuantity,
             totalAmount,
             createdAt,

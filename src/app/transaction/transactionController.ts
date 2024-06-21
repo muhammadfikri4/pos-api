@@ -1,12 +1,14 @@
 import { StatusTransaction } from "@prisma/client";
+import { ProductBodyDTO } from "app/product/productDTO";
+import { deleteProductService, updateProductService } from "app/product/productService";
 import { type Request, type Response } from "express";
-import { HttpError } from "utils/HttpError";
 import { MESSAGE_CODE } from "../../utils/ErrorCode";
 import { HandleResponse } from "../../utils/HandleResponse";
+import { HttpError } from "../../utils/HttpError";
 import { MESSAGES } from "../../utils/Messages";
 import { createMidtransTransaction } from "./midtransService";
-import { TransactionBodyDTO, TransactionDetailDTO } from "./transactionDTO";
-import { UpdateToPaidTransactionService, createTransactionService, customUpdateStatusTransactionService, getHistoryByTransactionIdService, getTransactionByIdService, getTransactionDetailByTransactionIdService, getTransactionService } from "./transactionService";
+import { TransactionBodyDTO, TransactionDetailDTO, WebhookMidtransTransactionBodyDTO } from "./transactionDTO";
+import { UpdateToPaidTransactionService, createTransactionService, customUpdateStatusTransactionService, getHistoryByTransactionIdService, getTransactionByIdService, getTransactionDetailByTransactionIdService, getTransactionService, handleWebhookTransactionService } from "./transactionService";
 import { IFilterTransaction } from "./transactionTypes";
 
 export const createTransactionController = async (req: Request, res: Response) => {
@@ -19,12 +21,9 @@ export const createTransactionController = async (req: Request, res: Response) =
     }
 
     if (paymentMethod === 'CASH') {
-        return HandleResponse(res, 201, MESSAGE_CODE.SUCCESS, MESSAGES.CREATED.TRANSACTION, {
-            transaction: transactionCreation,
-            message: 'Transaction created and marked as paid'
-        });
+        return HandleResponse(res, 201, MESSAGE_CODE.SUCCESS, MESSAGES.CREATED.TRANSACTION, transactionCreation);
     } else if (paymentMethod === 'QRIS') {
-        const midtransResponse = await createMidtransTransaction(transactionCreation, details as TransactionDetailDTO[], name as string, email as string);
+        const midtransResponse = await createMidtransTransaction(transactionCreation as TransactionBodyDTO, details as TransactionDetailDTO[], name as string, email as string);
         if ((midtransResponse as HttpError)?.message) {
             return HandleResponse(res, 500, MESSAGE_CODE.INTERNAL_SERVER_ERROR, (midtransResponse as HttpError).message);
         }
@@ -98,20 +97,34 @@ export const customUpdateStatusTransactionController = async (req: Request, res:
     return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.TRANSACTION.UPDATE_STATUS)
 }
 
-// export const updateProductController = async (req: Request, res: Response) => {
-//     const { id } = req.params
-//     const { name, categoryId, price, stock } = req.body as ProductBodyDTO
-//     const update = await updateProductService({ name, categoryId, price, id, stock }, req);
-//     if ((update as HttpError)?.message) {
-//         return HandleResponse(res, (update as HttpError).statusCode, (update as HttpError).code, (update as HttpError).message)
-//     }
-//     return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.PRODUCT.UPDATE)
-// }
-// export const deleteProductController = async (req: Request, res: Response) => {
-//     const { id } = req.params
-//     const update = await deleteProductService(String(id));
-//     if ((update as HttpError)?.message) {
-//         return HandleResponse(res, (update as HttpError).statusCode, (update as HttpError).code, (update as HttpError).message)
-//     }
-//     return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.PRODUCT.DELETE)
-// }
+export const handleWebhookTransactionController = async (req: Request, res: Response) => {
+    const { order_id, settlement_time, signature_key, transaction_status } = req.body as WebhookMidtransTransactionBodyDTO
+    console.log(req.body)
+    const paymentWebhook = await handleWebhookTransactionService(
+        settlement_time as string,
+        signature_key as string,
+        order_id as string,
+        transaction_status as string)
+
+
+    console.log({ paymentWebhook })
+    return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.PAYMENT)
+}
+
+export const updateProductController = async (req: Request, res: Response) => {
+    const { id } = req.params
+    const { name, categoryId, price, stock } = req.body as ProductBodyDTO
+    const update = await updateProductService({ name, categoryId, price, id, stock }, req);
+    if ((update as HttpError)?.message) {
+        return HandleResponse(res, (update as HttpError).statusCode, (update as HttpError).code, (update as HttpError).message)
+    }
+    return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.PRODUCT.UPDATE)
+}
+export const deleteProductController = async (req: Request, res: Response) => {
+    const { id } = req.params
+    const update = await deleteProductService(String(id));
+    if ((update as HttpError)?.message) {
+        return HandleResponse(res, (update as HttpError).statusCode, (update as HttpError).code, (update as HttpError).message)
+    }
+    return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.PRODUCT.DELETE)
+}

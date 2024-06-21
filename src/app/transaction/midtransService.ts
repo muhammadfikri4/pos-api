@@ -1,16 +1,16 @@
 import { getProductById } from "app/product/productRepo";
 import { ENV } from "libs";
 import Midtrans from "midtrans-client";
-import { TransactionDetailDTO } from "./transactionDTO";
+import { TransactionBodyDTO, TransactionDetailDTO } from "./transactionDTO";
 
 const snap = new Midtrans.Snap({
-  isProduction: false,
+  isProduction: true,
   serverKey: ENV.MIDTRANS_SERVER_KEY as string,
   clientKey: ENV.MIDTRANS_CLIENT_KEY as string,
 });
 
 export const createMidtransTransaction = async (
-  transaction: any,
+  transaction: TransactionBodyDTO,
   details: TransactionDetailDTO[],
   name: string,
   email: string

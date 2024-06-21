@@ -7,7 +7,7 @@ import { Meta } from '../../utils/Meta'
 import { getProductById, updateProductStock } from '../product/productRepo'
 import { TransactionBodyDTO, TransactionDetailDTO } from './transactionDTO'
 import { getTransactionsMapper } from './transactionMapper'
-import { createHistoryBaseOnTransaction, createTransaction, createTransactionDetail, getHistoryByTransactionId, getTransaction, getTransactionById, getTransactionCount, getTransactionDetailByTransactionId, updateStatusTransaction } from './transactionRepo'
+import { createHistoryBaseOnTransaction, createIncomeByTransaction, createTransaction, createTransactionDetail, getHistoryByTransactionId, getTransaction, getTransactionById, getTransactionCount, getTransactionDetailByTransactionId, updateStatusTransaction } from './transactionRepo'
 import { IFilterTransaction, TransactionModelTypes } from './transactionTypes'
 import { createTransactionDetailValidate, createTransactionValidate, updateStatusToPaidTransactionValidate } from './transactionValidate'
 
@@ -96,4 +96,26 @@ export const customUpdateStatusTransactionService = async (id: string, status: S
     const updateTransaction = await updateStatusTransaction(id, status.toUpperCase() as StatusTransaction);
     await createHistoryBaseOnTransaction(id, status.toUpperCase() as StatusTransaction)
     return updateTransaction
+}
+
+export const handleWebhookTransactionService = async (settlementTime: string, signatureKey: string, transactionId: string, transactionStatus: string) => {
+    if (transactionId && transactionStatus === 'settlement') {
+        const transaction = await getTransactionById(transactionId)
+        if (transaction) {
+            const findTransaction = await getTransactionById(transactionId as string)
+            const promises = findTransaction?.transactionDetails?.map(async (item) => {
+                const getProduct = await getProductById(item?.productId)
+                await updateProductStock(getProduct?.id as string, (getProduct?.stock as number) - (item?.quantity as number))
+                return []
+            }) || []
+            await Promise.all(promises)
+            const updateTransaction = await updateStatusTransaction(transactionId, 'PAID', settlementTime, signatureKey);
+            await createHistoryBaseOnTransaction(transactionId, 'PAID')
+            await createIncomeByTransaction(transactionId, transaction.totalAmount)
+            return updateTransaction
+        }
+    }
+
+    return null
+
 }

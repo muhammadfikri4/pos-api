@@ -5,6 +5,7 @@ export const MESSAGES = {
         PRODUCT: "Product created successfully",
         TRANSACTION: "Transaction created successfully",
         HISTORY: "History created successfully",
+
     },
     ERROR: {
         NOT_FOUND: {
@@ -45,7 +46,11 @@ export const MESSAGES = {
             TOTAL_QUANTITY: "Total Quantity is required",
             TOTAL_AMOUNT: "Total Amount is required",
         },
-        INTERNAL_SERVER: "Internal server error"
+        INTERNAL_SERVER: "Internal server error",
+        PAYMENT: {
+            FAILED: "Payment failed",
+
+        }
     },
     SUCCESS: {
         USER: "User logged in successfully",
@@ -68,7 +73,8 @@ export const MESSAGES = {
         },
         HISTORY: {
             GET: "Success to fetch history"
-        }
+        },
+        PAYMENT: "Payment success",
 
     }
 }
