@@ -4,10 +4,10 @@ import { HttpError } from "utils/HttpError";
 import { MESSAGE_CODE } from "../../utils/ErrorCode";
 import { HandleResponse } from "../../utils/HandleResponse";
 import { MESSAGES } from "../../utils/Messages";
-import { TransactionBodyDTO } from "./transactionDTO";
+import { createMidtransTransaction } from "./midtransService";
+import { TransactionBodyDTO, TransactionDetailDTO } from "./transactionDTO";
 import { UpdateToPaidTransactionService, createTransactionService, customUpdateStatusTransactionService, getHistoryByTransactionIdService, getTransactionByIdService, getTransactionDetailByTransactionIdService, getTransactionService } from "./transactionService";
 import { IFilterTransaction } from "./transactionTypes";
-import { createMidtransTransaction } from "./midtransService";
 
 export const createTransactionController = async (req: Request, res: Response) => {
     const { name, email, paymentMethod, details } = req.body as TransactionBodyDTO;
@@ -24,7 +24,7 @@ export const createTransactionController = async (req: Request, res: Response) =
             message: 'Transaction created and marked as paid'
         });
     } else if (paymentMethod === 'QRIS') {
-        const midtransResponse = await createMidtransTransaction(transactionCreation, details, name as string, email as string);
+        const midtransResponse = await createMidtransTransaction(transactionCreation, details as TransactionDetailDTO[], name as string, email as string);
         if ((midtransResponse as HttpError)?.message) {
             return HandleResponse(res, 500, MESSAGE_CODE.INTERNAL_SERVER_ERROR, (midtransResponse as HttpError).message);
         }

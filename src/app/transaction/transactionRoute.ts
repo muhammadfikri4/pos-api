@@ -10,5 +10,9 @@ route.get("/", getTransactionController)
 route.get("/history/:transactionId", getHistoryByTransactionIdController)
 route.put("/paid/:transactionId", UpdateToPaidTransactionController)
 route.put("/status/:transactionId", customUpdateStatusTransactionController)
+route.post('/testing', (req, res) => {
+    console.log(req.body)
+    return res.json({ message: "Hello World" })
+})
 
 export default route

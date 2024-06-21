@@ -10,7 +10,9 @@ route.use("/auth", authRoute);
 route.use("/category", categoryRoute)
 route.use("/product", productRoute)
 route.use("/transaction", transactionRoute)
-
+route.post("/testing", (req: Request, res: Response) => {
+    console.log(req.body)
+})
 route.get("/", (req: Request, res: Response) => {
     return res.json({ message: "Hello World 🚀" })
 })

@@ -55,7 +55,7 @@ export const updateProductService = async ({ id, name, categoryId, price, stock 
     if (image !== undefined) updateFields.image = url;
     if (stock !== undefined) updateFields.stock = Number(stock);
     if (categoryId === undefined) updateFields.categoryId = oldProduct?.categoryId
-    console.log(oldProduct?.image)
+
     if (image) {
         // unlinkSync(oldProduct?.image.replace("http://localhost:5000/", "src/") as string);
         unlinkSync(oldProduct?.image.replace("http://localhost:5000/", "./src/") as string);
