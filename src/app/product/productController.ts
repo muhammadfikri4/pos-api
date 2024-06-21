@@ -11,7 +11,7 @@ export const createProductController = async (req: Request, res: Response) => {
 
 
     const { name, price, categoryId, stock } = req.body as ProductBodyDTO
-    console.log(name)
+
     const categoryCreation = await createProductService({ name, price, categoryId, stock }, req);
 
     if ((categoryCreation as HttpError)?.message) {
