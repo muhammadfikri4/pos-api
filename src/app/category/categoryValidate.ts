@@ -27,6 +27,6 @@ export const deleteCategoryValidate = async (id: string) => {
     }
     const relatedProducts = await getProductsByCategoryId(id);
     if (relatedProducts.length > 0) {
-        return AppError(MESSAGES.ERROR.CATEGORY_RELATED_PRODUCTS, 400, MESSAGE_CODE.CATEGORY_RELATED_PRODUCTS);
+        return AppError(MESSAGES.ERROR.RELATED.PRODUCT, 400, MESSAGE_CODE.BAD_REQUEST);
     }
 }

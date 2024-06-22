@@ -15,6 +15,7 @@ dotenv.config()
 export const createProductService = async ({ name, categoryId, price, stock }: ProductBodyDTO, req: Request) => {
     const image = req.file?.filename
 
+    console.log(req.file)
     const validate = await createProductValidate({ name, categoryId, image, stock }, req.file?.size as number)
     if ((validate as HttpError)?.message) {
         return AppError((validate as HttpError).message, (validate as HttpError).statusCode, (validate as HttpError).code)

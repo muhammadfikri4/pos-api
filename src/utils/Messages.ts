@@ -51,6 +51,9 @@ export const MESSAGES = {
         PAYMENT: {
             FAILED: "Payment failed",
 
+        },
+        RELATED: {
+            PRODUCT: "Product is used on other data"
         }
     },
     SUCCESS: {
@@ -76,6 +79,9 @@ export const MESSAGES = {
             GET: "Success to fetch history"
         },
         PAYMENT: "Payment success",
+        INCOME: {
+            GET: "Success to get income"
+        }
 
     }
 }
