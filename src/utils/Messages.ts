@@ -75,6 +75,9 @@ export const MESSAGES = {
             GET: "Success to fetch history"
         },
         PAYMENT: "Payment success",
+        INCOME: {
+            GET: "Success to get income"
+        }
 
     }
 }

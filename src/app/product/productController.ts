@@ -12,10 +12,10 @@ export const createProductController = async (req: Request, res: Response) => {
 
     const { name, price, categoryId, stock } = req.body as ProductBodyDTO
 
-    const categoryCreation = await createProductService({ name, price, categoryId, stock }, req);
+    const prodyctCreation = await createProductService({ name, price, categoryId, stock }, req);
 
-    if ((categoryCreation as HttpError)?.message) {
-        return HandleResponse(res, (categoryCreation as HttpError).statusCode, (categoryCreation as HttpError).code, (categoryCreation as HttpError).message)
+    if ((prodyctCreation as HttpError)?.message) {
+        return HandleResponse(res, (prodyctCreation as HttpError).statusCode, (prodyctCreation as HttpError).code, (prodyctCreation as HttpError).message)
     }
     return HandleResponse(res, 201, MESSAGE_CODE.SUCCESS, MESSAGES.CREATED.PRODUCT)
 }
@@ -44,9 +44,9 @@ export const updateProductController = async (req: Request, res: Response) => {
 }
 export const deleteProductController = async (req: Request, res: Response) => {
     const { id } = req.params
-    const update = await deleteProductService(String(id));
-    if ((update as HttpError)?.message) {
-        return HandleResponse(res, (update as HttpError).statusCode, (update as HttpError).code, (update as HttpError).message)
+    const deleteProduct = await deleteProductService(String(id));
+    if ((deleteProduct as HttpError)?.message) {
+        return HandleResponse(res, (deleteProduct as HttpError).statusCode, (deleteProduct as HttpError).code, (deleteProduct as HttpError).message)
     }
     return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.PRODUCT.DELETE)
 }
