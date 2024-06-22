@@ -26,6 +26,7 @@ export const getTransactionsMapper = (transactions: TransactionModelTypes[]) => 
                     product: {
                         id: product.id,
                         name: product.name,
+                        image: product.image,
                         category: {
                             id: product.category.id,
                             name: product.category.name
