@@ -59,3 +59,11 @@ export const deleteCategory = async (id: string) => {
         }
     })
 }
+
+export const getProductsByCategoryId = async (categoryId: string) => {
+    return await prisma.product.findMany({
+        where: {
+            categoryId: categoryId
+        }
+    });
+};
