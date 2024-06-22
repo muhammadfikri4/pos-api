@@ -47,6 +47,7 @@ export const MESSAGES = {
             TOTAL_AMOUNT: "Total Amount is required",
         },
         INTERNAL_SERVER: "Internal server error",
+        CATEGORY_RELATED_PRODUCTS: "Category cannot be deleted because it has related products.",
         PAYMENT: {
             FAILED: "Payment failed",
 
