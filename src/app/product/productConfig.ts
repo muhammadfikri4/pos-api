@@ -1,12 +1,20 @@
+import { v2 as cloudinary } from 'cloudinary';
 import { type Request } from 'express';
 import multer, { FileFilterCallback } from 'multer';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import { ENV } from '../../libs';
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "src/images/products");
-    },
-    filename: (req, file, cb) => {
-        cb(null, `${new Date().getTime()}_${file.originalname}`);
+cloudinary.config({
+    cloud_name: ENV.CLOUDINARY_CLOUD_NAME,
+    api_key: ENV.CLOUDINARY_API_KEY,
+    api_secret: ENV.CLOUDINARY_API_SECRET
+});
+
+// Konfigurasi Multer-Cloudinary Storage
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        public_id: () => `products/${+new Date()}`,
     },
 });
 

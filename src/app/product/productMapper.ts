@@ -16,3 +16,18 @@ export const getProductMapper = (products: ProductModelTypes[]): ProductModelTyp
         }
     })
 }
+
+export const getProductByIdMapper = (product: ProductModelTypes): ProductModelTypes => {
+    const { id, name, price, category, image, stock } = product
+    return {
+        id,
+        name,
+        price,
+        image,
+        category: {
+            id: category.id,
+            name: category.name
+        },
+        stock
+    }
+}

@@ -3,7 +3,7 @@ import { MESSAGE_CODE } from "../../utils/ErrorCode";
 import { HandleResponse } from "../../utils/HandleResponse";
 import { HttpError } from "../../utils/HttpError";
 import { MESSAGES } from "../../utils/Messages";
-import { createCategoryService, deleteCategoryService, getCategoryService, updateCategoryService } from "./categoryService";
+import { createCategoryService, deleteCategoryService, getCategoryByIdService, getCategoryService, updateCategoryService } from "./categoryService";
 import { CategoryModelTypes, IFilterCategory } from "./categoryTypes";
 
 export const createCategoryController = async (req: Request, res: Response) => {
@@ -47,4 +47,13 @@ export const deleteCategoryController = async (req: Request, res: Response) => {
         return HandleResponse(res, (update as HttpError).statusCode, (update as HttpError).code, (update as HttpError).message)
     }
     return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.CATEGORY.DELETE)
+}
+
+export const getCategoryByIdController = async (req: Request, res: Response) => {
+    const { id } = req.params
+    const category = await getCategoryByIdService(id);
+    if ((category as HttpError)?.message) {
+        return HandleResponse(res, (category as HttpError).statusCode, (category as HttpError).code, (category as HttpError).message)
+    }
+    return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.CATEGORY.GET, category)
 }

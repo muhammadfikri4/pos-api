@@ -18,7 +18,7 @@ model User {
   name      String
   email     String
   password  String
-  role      String   @default("admin")
+  role      Role     @default(Admin)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -32,13 +32,77 @@ model Category {
 }
 
 model Product {
-  id         String   @id @unique @default(uuid())
-  name       String
-  price      Int
-  image      String
-  category   Category @relation(fields: [categoryId], references: [id])
-  categoryId String
-  stock      Int
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id                String              @id @unique @default(uuid())
+  name              String
+  price             Int
+  image             String
+  category          Category            @relation(fields: [categoryId], references: [id])
+  categoryId        String
+  stock             Int
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  TransactionDetail TransactionDetail[]
+}
+
+model Transaction {
+  id                 String              @id @unique @default(uuid())
+  name               String
+  email              String
+  status             StatusTransaction
+  paymentMethod      PaymentMethod
+  totalQuantity      Int
+  totalAmount        Int
+  settlementTime     String?
+  signatureKey       String?
+  serialNumber       Int                 @unique @default(autoincrement())
+  transactionDetails TransactionDetail[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  History            History[]
+  Income             Income[]
+}
+
+model TransactionDetail {
+  id            String      @id @unique @default(uuid())
+  productId     String
+  quantity      Int
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  product       Product     @relation(fields: [productId], references: [id])
+  transactionId String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Income {
+  id            String      @id @unique @default(uuid())
+  nominal       Int
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  transactionId String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model History {
+  id            String            @id @unique @default(uuid())
+  transaction   Transaction       @relation(fields: [transactionId], references: [id])
+  status        StatusTransaction
+  transactionId String
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+}
+
+enum Role {
+  Admin
+  Owner
+}
+
+enum StatusTransaction {
+  PAID
+  UNPAID
+  PROCESS_BY_KITCHEN
+}
+
+enum PaymentMethod {
+  QRIS
+  CASH
 }

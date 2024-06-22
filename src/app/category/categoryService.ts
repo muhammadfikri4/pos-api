@@ -4,7 +4,7 @@ import { AppError, HttpError } from '../../utils/HttpError'
 import { MESSAGES } from '../../utils/Messages'
 import { Meta } from '../../utils/Meta'
 import { CategoryBodyDTO } from './categoryDTO'
-import { createCategory, deleteCategory, getCategories, getCategoriesCount, getCategoryByName, updateCategory } from './categoryRepo'
+import { createCategory, deleteCategory, getCategories, getCategoriesCount, getCategoryById, getCategoryByName, updateCategory } from './categoryRepo'
 import { IFilterCategory } from './categoryTypes'
 import { deleteCategoryValidate, updateCategoryValidate } from './categoryValidate'
 
@@ -53,3 +53,12 @@ export const deleteCategoryService = async (id: string) => {
     const newCategory = await deleteCategory(id)
     return newCategory
 }
+
+export const getCategoryByIdService = async (category_id: string) => {
+    const category = await getCategoryById(category_id);
+    if (!category) {
+      return AppError(MESSAGES.ERROR.NOT_FOUND.CATEGORY, 404, MESSAGE_CODE.NOT_FOUND);
+    }  
+    const { id, name } = category;
+    return { id, name };
+  };

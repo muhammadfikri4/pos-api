@@ -18,3 +18,10 @@ export interface IFilterProduct {
     page?: number,
     perPage?: number
 }
+
+export interface UpdateField {
+    name?: string
+    categoryId?: string
+    price?: number
+    image?: string
+}

@@ -1,9 +1,7 @@
 {
   "compilerOptions": {
-    /* Language and Environment */
-    "baseUrl": "./src", /* Set to the root of your source files */
+    "baseUrl": "./src",
     "target": "ES2017",
-    /* Modules */
     "module": "commonjs",
     "outDir": "./dist",
     "esModuleInterop": true,
@@ -11,7 +9,8 @@
     "strict": true,
     "skipLibCheck": true,
     "incremental": true,
-    "tsBuildInfoFile": "./dist/.tsbuildinfo"
+    "tsBuildInfoFile": "./dist/.tsbuildinfo",
+    "typeRoots": ["./src/@types", "./node_modules/@types"]
   },
-  "include": ["src"]
+  "include": ["src", "src/@types"]
 }
