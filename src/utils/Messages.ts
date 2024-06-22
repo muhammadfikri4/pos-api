@@ -50,6 +50,9 @@ export const MESSAGES = {
         PAYMENT: {
             FAILED: "Payment failed",
 
+        },
+        RELATED: {
+            PRODUCT: "Product is used on other data"
         }
     },
     SUCCESS: {
