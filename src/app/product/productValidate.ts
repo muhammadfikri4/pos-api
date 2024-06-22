@@ -8,18 +8,18 @@ import { getProductById, getProductByName } from "./productRepo"
 
 export const createProductValidate = async ({ name, categoryId, image, stock }: ProductBodyDTO, size: number) => {
     if (!name) {
-        unlinkSync(`./src/images/products/${image}`)
+        // unlinkSync(`./src/images/products/${image}`)
         return AppError(MESSAGES.ERROR.REQUIRED.NAME, 400, MESSAGE_CODE.BAD_REQUEST)
     }
 
     const findName = await getProductByName({ name })
     if (findName) {
-        unlinkSync(`./src/images/products/${image}`)
+        // unlinkSync(`./src/images/products/${image}`)
         return AppError(MESSAGES.ERROR.ALREADY.PRODUCT, 400, MESSAGE_CODE.BAD_REQUEST)
     }
     const findCategory = await getCategoryById(categoryId)
     if (!findCategory) {
-        unlinkSync(`./src/images/products/${image}`)
+        // unlinkSync(`./src/images/products/${image}`)
         return AppError(MESSAGES.ERROR.INVALID.CATEGORY_ID, 400, MESSAGE_CODE.BAD_REQUEST)
     }
 
@@ -28,11 +28,11 @@ export const createProductValidate = async ({ name, categoryId, image, stock }: 
     }
 
     if (size > 5242880) {
-        unlinkSync(`./src/images/products/${image}`)
+        // unlinkSync(`./src/images/products/${image}`)
         return AppError(MESSAGES.ERROR.INVALID.IMAGE_SIZE, 400, MESSAGE_CODE.BAD_REQUEST)
     }
     if (!stock) {
-        unlinkSync(`./src/images/products/${image}`)
+        // unlinkSync(`./src/images/products/${image}`)
         return AppError(MESSAGES.ERROR.REQUIRED.STOCK, 400, MESSAGE_CODE.BAD_REQUEST)
     }
 
@@ -51,7 +51,7 @@ export const updateProductValidate = async ({ name, id, image }: ProductBodyDTO,
     }
 
     if (size > 5242880) {
-        unlinkSync(image as string)
+        // unlinkSync(image as string)
         return AppError(MESSAGES.ERROR.INVALID.IMAGE_SIZE, 400, MESSAGE_CODE.BAD_REQUEST)
     }
 }
