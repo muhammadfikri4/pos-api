@@ -50,10 +50,12 @@ export const getTransactionController = async (req: Request, res: Response) => {
     try {
         const { page, perPage, email, name } = req.query as IFilterTransaction
 
-        const transactionService = await getTransactionService({ email, name, page, perPage })
+        const transactionService = await getTransactionService({ email, name, page: Number(page) || undefined, perPage: Number(perPage) || undefined })
 
         return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.TRANSACTION.GET, transactionService.data, transactionService.meta)
     } catch (error) {
+        console.log(error);
+        
         return HandleResponse(res, 500, MESSAGE_CODE.INTERNAL_SERVER_ERROR, MESSAGES.ERROR.INTERNAL_SERVER)
     }
 
