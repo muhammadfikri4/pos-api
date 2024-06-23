@@ -14,6 +14,9 @@ export const getProducts = async ({ name, page, perPage, categoryId }: IFilterPr
         include: {
             category: true
         },
+        orderBy: {
+            createdAt: 'desc'
+        },
         take: perPage,
         skip: (Number(page) - 1) * Number(perPage)
 

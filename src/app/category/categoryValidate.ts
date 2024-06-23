@@ -23,7 +23,7 @@ export const updateCategoryValidate = async ({ name, id }: CategoryBodyDTO) => {
 export const deleteCategoryValidate = async (id: string) => {
     const findUnique = await getCategoryById(id)
     if (!findUnique) {
-        return AppError(MESSAGES.ERROR.NOT_FOUND.CATEGORY, 404, MESSAGE_CODE.NOT_FOUND)
+        return AppError(MESSAGES.ERROR.NOT_FOUND.CATEGORY, 404, MESSAGE_CODE.NOT_FOUND);
     }
     const relatedProducts = await getProductsByCategoryId(id);
     if (relatedProducts.length > 0) {

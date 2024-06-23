@@ -10,6 +10,9 @@ export const getCategories = async ({ name, page, perPage }: IFilterCategory) =>
                 mode: 'insensitive'
             }
         },
+        orderBy: {
+            createdAt: 'desc'
+        },
         take: perPage,
         skip: (Number(page) - 1) * Number(perPage)
 
