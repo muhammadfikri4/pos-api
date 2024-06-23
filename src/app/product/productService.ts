@@ -15,7 +15,6 @@ dotenv.config()
 export const createProductService = async ({ name, categoryId, price, stock }: ProductBodyDTO, req: Request) => {
     const image = req.file?.filename
 
-    console.log(req.file)
     const validate = await createProductValidate({ name, categoryId, image, stock }, req.file?.size as number)
     if ((validate as HttpError)?.message) {
         return AppError((validate as HttpError).message, (validate as HttpError).statusCode, (validate as HttpError).code)
@@ -34,7 +33,7 @@ export const getProductService = async ({ name, page = 1, perPage = 10, category
         getProductMapper(allProducts),
         getProductsCount({ name })])
 
-    return { data: products, meta: Meta(page, perPage, totalData) }
+    return { data: products, meta: Meta(page, perPage, totalData) };
 }
 
 export const updateProductService = async ({ id, name, categoryId, price, stock }: ProductBodyDTO, req: Request) => {
