@@ -33,6 +33,9 @@ export const getIncomeCounts = async ({ from, to }: IFilterIncome) => {
                 gt: from,
                 lt: to
             },
+        },
+        orderBy: {
+            createdAt: 'desc'
         }
     })
 }

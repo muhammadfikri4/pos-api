@@ -51,6 +51,9 @@ export const getTransaction = async ({ page, perPage, email, name }: IFilterTran
                 }
             }
         },
+        orderBy: {
+            createdAt: 'desc'
+        },
         take: perPage,
         skip: (Number(page) - 1) * Number(perPage)
     })
