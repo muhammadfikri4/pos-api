@@ -6,7 +6,7 @@ import { MESSAGES } from '../../utils/Messages'
 import { Meta } from '../../utils/Meta'
 import { getProductById, updateProductStock } from '../product/productRepo'
 import { TransactionBodyDTO, TransactionDetailDTO } from './transactionDTO'
-import { getTransactionsMapper } from './transactionMapper'
+import { getTransactionByIdMapper, getTransactionsMapper } from './transactionMapper'
 import { createHistoryBaseOnTransaction, createIncomeByTransaction, createTransaction, createTransactionDetail, getHistoryByTransactionId, getTransaction, getTransactionById, getTransactionCount, getTransactionDetailByTransactionId, updateStatusTransaction } from './transactionRepo'
 import { IFilterTransaction, TransactionModelTypes } from './transactionTypes'
 import { createTransactionDetailValidate, createTransactionValidate, updateStatusToPaidTransactionValidate } from './transactionValidate'
@@ -69,10 +69,12 @@ export const UpdateToPaidTransactionService = async ({ id }: TransactionBodyDTO)
 
 export const getTransactionByIdService = async (id: string) => {
     const transaction = await getTransactionById(id)
+
     if (!transaction) {
         return AppError(MESSAGES.ERROR.NOT_FOUND.TRANSACTION, 404, MESSAGE_CODE.NOT_FOUND)
     }
-    return transaction
+    const transactionById = getTransactionByIdMapper(transaction as unknown as TransactionModelTypes)
+    return transactionById
 }
 
 export const getHistoryByTransactionIdService = async (id: string) => {

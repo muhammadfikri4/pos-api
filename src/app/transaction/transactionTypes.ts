@@ -8,9 +8,9 @@ export interface CategoryProductModelTypes {
 export interface ProductTransactionModelTypes {
     id: string,
     name: string,
-    price: number,
+    price?: number,
     image: string,
-    stock: number,
+    stock?: number,
     category: {
         id: string,
         name: string,
