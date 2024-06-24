@@ -15,7 +15,8 @@ export interface IncomeModelTypes {
         name: string,
         paymentMethod: PaymentMethod,
         settlementTime: string,
-        totalAmount: number
+        totalAmount: number,
+        totalQuantity: number
     }
     createdAt: Date
 }
