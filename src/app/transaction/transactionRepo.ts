@@ -101,7 +101,22 @@ export const getTransactionById = async (id: string) => {
             id
         },
         include: {
-            transactionDetails: true
+            transactionDetails: {
+                select: {
+                    id: true,
+                    quantity: true,
+                    productId: true,
+                    product: {
+                        select: {
+                            id: true,
+                            name: true,
+                            image: true,
+                            price: true,
+                            stock: true
+                        }
+                    }
+                }
+            }
         }
     })
 }
