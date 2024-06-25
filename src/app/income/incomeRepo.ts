@@ -10,6 +10,7 @@ export const getIncomeByTransactionId = async (transactionId: string) => {
 }
 
 export const getAllIncome = async ({ page, perPage, from, to }: IFilterIncome) => {
+
     return await prisma.income.findMany({
         where: {
             createdAt: {
