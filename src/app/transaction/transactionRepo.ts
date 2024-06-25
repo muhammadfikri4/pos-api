@@ -184,7 +184,7 @@ export const createIncomeByTransaction = (
 
 export const updatePaymentTransaction = async (
   transactionId: string,
-  paymentMoney: number,
+  totalPaid: number,
   totalAmount: number
 ) => {
   return await prisma.transaction.update({
@@ -192,8 +192,10 @@ export const updatePaymentTransaction = async (
       id: transactionId,
     },
     data: {
-      totalPaid: paymentMoney,
-      totalReturn: totalAmount - paymentMoney,
+      totalPaid,
+      totalReturn: totalAmount - totalPaid,
+      status: "PAID",
+      settlementTime: new Date().toISOString(),
     },
   });
 }

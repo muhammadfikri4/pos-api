@@ -57,14 +57,14 @@ export const updateStatusToPaidTransactionValidate = async (id: string) => {
     }
 }
 
-export const updatePaymentTransactionValidate = async (id: string, paymentMoney: number) => {
+export const updatePaymentTransactionValidate = async (id: string, totalPaid: number) => {
     const findTransaction = await getTransactionById(id as string)
     if (!findTransaction) {
         return AppError(MESSAGES.ERROR.NOT_FOUND.TRANSACTION, 404, MESSAGE_CODE.NOT_FOUND)
     }
 
     const totalAmount = findTransaction?.totalAmount as number;
-    if (paymentMoney < totalAmount) {
+    if (totalPaid < totalAmount) {
         return AppError(MESSAGES.ERROR.PAYMENT.PAYMENT_MONEY, 400, MESSAGE_CODE.BAD_REQUEST)
     }
 }
