@@ -4,7 +4,7 @@ import Midtrans from "midtrans-client";
 import { TransactionBodyDTO, TransactionDetailDTO } from "./transactionDTO";
 
 const snap = new Midtrans.Snap({
-  isProduction: true,
+  isProduction: false,
   serverKey: ENV.MIDTRANS_SERVER_KEY as string,
   clientKey: ENV.MIDTRANS_CLIENT_KEY as string,
 });

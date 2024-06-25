@@ -33,6 +33,8 @@ export const createTransaction = async ({
       paymentMethod: paymentMethod as PaymentMethod,
       totalAmount,
       totalQuantity,
+      totalPaid: 0,
+      totalReturn: 0,
       status: "UNPAID",
     },
   });
@@ -179,3 +181,19 @@ export const createIncomeByTransaction = (
     },
   });
 };
+
+export const updatePaymentTransaction = async (
+  transactionId: string,
+  paymentMoney: number,
+  totalAmount: number
+) => {
+  return await prisma.transaction.update({
+    where: {
+      id: transactionId,
+    },
+    data: {
+      totalPaid: paymentMoney,
+      totalReturn: totalAmount - paymentMoney,
+    },
+  });
+}

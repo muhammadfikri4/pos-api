@@ -34,6 +34,8 @@ export interface TransactionModelTypes {
     paymentMethod: PaymentMethod,
     totalQuantity: number,
     totalAmount: number,
+    totalPaid: number,
+    totalReturn: number,
     settlementTime: string,
     signatureKey: string,
     serialNumber: number,

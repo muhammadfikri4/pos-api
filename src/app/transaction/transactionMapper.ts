@@ -12,6 +12,8 @@ export const getTransactionsMapper = (
       status,
       totalQuantity,
       totalAmount,
+      totalPaid,
+      totalReturn,
       createdAt,
       updatedAt,
       transactionDetails,
@@ -30,6 +32,8 @@ export const getTransactionsMapper = (
       signatureKey,
       totalQuantity,
       totalAmount,
+      totalPaid,
+      totalReturn,
       createdAt,
       updatedAt,
       transactionDetails: transactionDetails?.map((detail) => {
@@ -42,6 +46,7 @@ export const getTransactionsMapper = (
             id: product.id,
             name: product.name,
             image: product.image,
+            price: product.price,
             category: {
               id: product.category.id,
               name: product.category.name,
@@ -66,6 +71,8 @@ export const getTransactionByIdMapper = (
     status,
     totalQuantity,
     totalAmount,
+    totalPaid,
+    totalReturn,
     createdAt,
     updatedAt,
     transactionDetails,
@@ -84,6 +91,8 @@ export const getTransactionByIdMapper = (
     signatureKey,
     totalQuantity,
     totalAmount,
+    totalPaid,
+    totalReturn,
     createdAt,
     updatedAt,
     transactionDetails: transactionDetails?.map((detail) => {
@@ -96,6 +105,7 @@ export const getTransactionByIdMapper = (
           id: product.id,
           name: product.name,
           image: product.image,
+          price: product.price,
           category: {
             id: product.category.id,
             name: product.category.name,

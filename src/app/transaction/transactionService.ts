@@ -7,9 +7,9 @@ import { Meta } from '../../utils/Meta'
 import { getProductById, updateProductStock } from '../product/productRepo'
 import { TransactionBodyDTO, TransactionDetailDTO } from './transactionDTO'
 import { getTransactionByIdMapper, getTransactionsMapper } from './transactionMapper'
-import { createHistoryBaseOnTransaction, createIncomeByTransaction, createTransaction, createTransactionDetail, getHistoryByTransactionId, getTransaction, getTransactionById, getTransactionCount, getTransactionDetailByTransactionId, updateStatusTransaction } from './transactionRepo'
+import { createHistoryBaseOnTransaction, createIncomeByTransaction, createTransaction, createTransactionDetail, getHistoryByTransactionId, getTransaction, getTransactionById, getTransactionCount, getTransactionDetailByTransactionId, updatePaymentTransaction, updateStatusTransaction } from './transactionRepo'
 import { IFilterTransaction, TransactionModelTypes } from './transactionTypes'
-import { createTransactionDetailValidate, createTransactionValidate, updateStatusToPaidTransactionValidate } from './transactionValidate'
+import { createTransactionDetailValidate, createTransactionValidate, updatePaymentTransactionValidate, updateStatusToPaidTransactionValidate } from './transactionValidate'
 
 dotenv.config()
 
@@ -98,6 +98,16 @@ export const customUpdateStatusTransactionService = async (id: string, status: S
     const updateTransaction = await updateStatusTransaction(id, status.toUpperCase() as StatusTransaction);
     await createHistoryBaseOnTransaction(id, status.toUpperCase() as StatusTransaction)
     return updateTransaction
+}
+
+export const UpdatePaymentTransactionService = async (id: string, paymentMoney: number) => {
+    const validate = await updatePaymentTransactionValidate(id, paymentMoney)
+    if ((validate as HttpError)?.message) {
+        return AppError((validate as HttpError).message, (validate as HttpError).statusCode, (validate as HttpError).code)
+    }
+    const transaction = await getTransactionById(id)
+    const updatePayment = await updatePaymentTransaction(id, paymentMoney, transaction?.totalAmount as number);
+    return updatePayment
 }
 
 export const handleWebhookTransactionService = async (settlementTime: string, signatureKey: string, transactionId: string, transactionStatus: string) => {

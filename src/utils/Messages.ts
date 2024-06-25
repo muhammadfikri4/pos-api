@@ -50,6 +50,7 @@ export const MESSAGES = {
         CATEGORY_RELATED_PRODUCTS: "Category cannot be deleted because it has related products.",
         PAYMENT: {
             FAILED: "Payment failed",
+            PAYMENT_MONEY: "Payment money is not enough"
 
         },
         RELATED: {
