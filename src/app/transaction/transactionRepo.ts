@@ -193,7 +193,7 @@ export const updatePaymentTransaction = async (
     },
     data: {
       totalPaid,
-      totalReturn: totalAmount - totalPaid,
+      totalReturn: totalPaid - totalAmount,
       status: "PAID",
       settlementTime: new Date().toISOString(),
     },
