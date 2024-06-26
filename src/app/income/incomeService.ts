@@ -1,4 +1,4 @@
-import { Meta } from "utils/Meta";
+import { Meta } from "../../utils/Meta";
 import { incomeMapper } from "./incomeMapper";
 import { getAllIncome, getIncomeCounts } from "./incomeRepo";
 import { IFilterIncome, IncomeModelTypes } from "./incomeTypes";
