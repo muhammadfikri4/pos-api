@@ -1,6 +1,6 @@
-import { getProductById } from "app/product/productRepo";
 import Midtrans from "midtrans-client";
 import { ENV } from "../../libs";
+import { getProductById } from "../product/productRepo";
 import { TransactionBodyDTO, TransactionDetailDTO } from "./transactionDTO";
 
 const snap = new Midtrans.Snap({
