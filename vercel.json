@@ -4,7 +4,12 @@
     {
       "src": "src/index.ts",
       "use": "@vercel/node",
-      "config": { "includeFiles": ["src/**"] }
+      "config": {
+        "includeFiles": ["src/**"],
+        "commands": {
+          "build": "prisma generate && tsc"
+        }
+      }
     }
   ],
   "routes": [

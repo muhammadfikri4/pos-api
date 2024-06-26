@@ -49,8 +49,9 @@
   "scripts": {
     "start": "npx tsc -w ",
     "dev": "npx nodemon",
-    "build": "tsc",
+    "build": "prisma generate && tsc",
     "lint": "npx eslint ./src --ext .ts",
-    "lint:fix": "npx eslint ./src --ext .ts --fix"
+    "lint:fix": "npx eslint ./src --ext .ts --fix",
+    "postinstall": "prisma generate"
   }
 }
