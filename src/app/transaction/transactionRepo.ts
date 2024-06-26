@@ -1,6 +1,6 @@
 import { StatusTransaction } from "@prisma/client";
-import { getProductById } from "app/product/productRepo";
 import prisma from "../../config";
+import { getProductById } from "../product/productRepo";
 import {
   PaymentMethod,
   TransactionBodyDTO,

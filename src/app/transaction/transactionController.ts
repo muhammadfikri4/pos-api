@@ -1,5 +1,4 @@
 import { StatusTransaction } from "@prisma/client";
-import { ProductBodyDTO } from "app/product/productDTO";
 import {
   deleteProductService,
   updateProductService,
@@ -9,6 +8,7 @@ import { MESSAGE_CODE } from "../../utils/ErrorCode";
 import { HandleResponse } from "../../utils/HandleResponse";
 import { HttpError } from "../../utils/HttpError";
 import { MESSAGES } from "../../utils/Messages";
+import { ProductBodyDTO } from "../product/productDTO";
 import { createMidtransTransaction } from "./midtransService";
 import {
   TransactionBodyDTO,

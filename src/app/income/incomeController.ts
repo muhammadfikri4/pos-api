@@ -1,7 +1,7 @@
 import { type Request, type Response } from 'express'
-import { MESSAGE_CODE } from 'utils/ErrorCode'
-import { HandleResponse } from 'utils/HandleResponse'
-import { MESSAGES } from 'utils/Messages'
+import { MESSAGE_CODE } from '../../utils/ErrorCode'
+import { HandleResponse } from '../../utils/HandleResponse'
+import { MESSAGES } from '../../utils/Messages'
 import { getIncomeService } from './incomeService'
 import { IFilterIncome } from './incomeTypes'
 
