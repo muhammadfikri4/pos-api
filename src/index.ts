@@ -13,7 +13,9 @@ const port = ENV.PORT || 5000
 dotenv.config();
 // dbconect()
 app.use(cookieParser())
-app.use(cors())
+app.use(cors({
+    origin: "https://pos-web-app-mu.vercel.app"
+}))
 app.use(express.json())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
