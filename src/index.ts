@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import express from 'express'
 // import { dbconect } from './config'
 import bodyParser from 'body-parser'
+import cors from 'cors'
 import path from 'path'
 import { ENV } from './libs'
 import routes from './routes'
@@ -12,6 +13,7 @@ const port = ENV.PORT || 5000
 dotenv.config();
 // dbconect()
 app.use(cookieParser())
+app.use(cors({ allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"], credentials: true, origin: "https://pos-web-app-mu.vercel.app" }))
 // app.use(cors({
 //     origin: "https://pos-web-app-mu.vercel.app",
 //     credentials: true,
