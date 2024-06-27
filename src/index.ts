@@ -13,7 +13,10 @@ const port = ENV.PORT || 5000
 dotenv.config();
 // dbconect()
 app.use(cookieParser())
-app.use(cors())
+app.use(cors({
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    origin: "https://pos-web-app-mu.vercel.app",
+}))
 // app.use(cors({
 //     origin: "https://pos-web-app-mu.vercel.app",
 //     credentials: true,
