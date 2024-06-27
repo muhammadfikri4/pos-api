@@ -20,6 +20,7 @@ export const registerController = async (req: Request, res: Response) => {
 
 export const loginController = async (req: Request, res: Response) => {
     const { email, password } = req.body
+    console.log(req.headers)
 
     if (!email) {
         return HandleResponse(res, 404, MESSAGE_CODE.NOT_FOUND, MESSAGES.ERROR.REQUIRED.EMAIL)
