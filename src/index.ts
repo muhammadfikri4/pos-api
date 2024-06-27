@@ -2,7 +2,6 @@ import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
 import express, { type NextFunction, type Request, type RequestHandler, type Response } from 'express'
 // import { dbconect } from './config'
-import bodyParser from 'body-parser'
 import cors from 'cors'
 import { ENV } from './libs'
 import routes from './routes'
@@ -31,10 +30,7 @@ const allowCors = (fn: RequestHandler) => async (req: Request, res: Response, ne
 
 
 app.use(cookieParser())
-app.use(cors({
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-    origin: "https://pos-web-app-mu.vercel.app",
-}))
+app.use(cors())
 // app.use(cors({
 //     origin: "https://pos-web-app-mu.vercel.app",
 //     credentials: true,
@@ -43,8 +39,8 @@ app.use(cors({
 //     req.headers['access-control-allow-origin'] = "https://pos-web-app-mu.vercel.app"
 //     req.
 // })
-app.use(express.json())
-app.use(bodyParser.json());
+app.use(express.json());
+// app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: true }));
 
 
