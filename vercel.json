@@ -16,7 +16,7 @@
     {
       "src": "/(.*)",
       "dest": "src/index.ts",
-      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE"],
+      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
       "headers": {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": "true",
