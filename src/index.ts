@@ -4,7 +4,6 @@ import express from 'express'
 // import { dbconect } from './config'
 import bodyParser from 'body-parser'
 import cors from 'cors'
-import { type Request, type Response } from 'express'
 import path from 'path'
 import { ENV } from './libs'
 import routes from './routes'
@@ -23,17 +22,6 @@ app.use(cors())
 //     req.headers['access-control-allow-origin'] = "https://pos-web-app-mu.vercel.app"
 //     req.
 // })
-app.use((req: Request, res: Response) => {
-    // res.setHeader('Access-Control-Allow-Credentials', '')
-    res.setHeader('Access-Control-Allow-Origin', '*')
-    // another common pattern
-    // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
-    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
-    res.setHeader(
-        'Access-Control-Allow-Headers',
-        'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-    )
-})
 app.use(express.json())
 app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: true }));
