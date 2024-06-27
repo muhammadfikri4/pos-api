@@ -14,7 +14,8 @@ dotenv.config();
 // dbconect()
 app.use(cookieParser())
 app.use(cors({
-    origin: "https://pos-web-app-mu.vercel.app"
+    origin: "https://pos-web-app-mu.vercel.app",
+    credentials: true,
 }))
 app.use(express.json())
 app.use(bodyParser.json());
