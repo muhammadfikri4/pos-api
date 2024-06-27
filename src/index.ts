@@ -13,7 +13,7 @@ const port = ENV.PORT || 5000
 dotenv.config();
 // dbconect()
 app.use(cookieParser())
-app.use(cors({ allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"], credentials: true, origin: "https://pos-web-app-mu.vercel.app" }))
+app.use(cors())
 // app.use(cors({
 //     origin: "https://pos-web-app-mu.vercel.app",
 //     credentials: true,
@@ -24,7 +24,7 @@ app.use(cors({ allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "A
 // })
 app.use(express.json())
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.use("/images", express.static(path.join(__dirname, "../src/images")));
