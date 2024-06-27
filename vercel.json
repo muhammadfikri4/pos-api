@@ -16,7 +16,12 @@
     {
       "src": "/(.*)",
       "dest": "src/index.ts",
-      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE"] 
+      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE"],
+      "headers": {
+        "Access-Control-Allow-Origin": "https://pos-web-app-mu.vercel.app",
+        "Access-Control-Allow-Methods": "GET,POST,PUT,PATCH,DELETE",
+        "Access-Control-Allow-Headers": "Content-Type"
+      }
     }
   ]
   
