@@ -19,7 +19,7 @@ app.use(cors({
     preflightContinue: false
 }));
 app.use(function (req: Request, res: Response, next: NextFunction) {
-    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Origin", "https://pos-web-app-mu.vercel.app");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
