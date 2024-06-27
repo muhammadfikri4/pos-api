@@ -27,9 +27,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use((req: Request, res: Response, next: NextFunction) => {
     console.log('CORS request:', req.method, req.headers.origin);
     console.log(req)
-    res.setHeader('Access-Control-Allow-Origin', 'https://pos-web-app-mu.vercel.app');
+    // res.setHeader('Access-Control-Allow-Origin', 'https://pos-web-app-mu.vercel.app');
     res.setHeader('Access-Control-Allow-Methods', "GET,OPTIONS,PATCH,DELETE,POST,PUT");
     res.setHeader('Access-Control-Allow-Credentials', 'true');
+    req.headers['access-control-allow-origin'] = 'https://pos-web-app-mu.vercel.app';
     if (req.method === 'OPTIONS') {
         res.status(200).end();
         return;
