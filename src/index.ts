@@ -12,7 +12,7 @@ const port = ENV.PORT || 5000
 dotenv.config();
 // dbconect()
 app.use(cors({
-    origin: ['https://pos-web-app-mu.vercel.app', 'http://localhost:5173'],
+    origin: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token', 'X-Requested-With', 'Accept', 'Accept-Version', 'Content-Length', 'Content-MD5', 'Content-Type', 'Date', 'X-Api-Version'],
     credentials: true,
