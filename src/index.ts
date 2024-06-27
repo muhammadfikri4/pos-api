@@ -4,7 +4,6 @@ import express, { type NextFunction, type Request, type RequestHandler, type Res
 // import { dbconect } from './config'
 import bodyParser from 'body-parser'
 import cors from 'cors'
-import path from 'path'
 import { ENV } from './libs'
 import routes from './routes'
 
@@ -49,7 +48,7 @@ app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: true }));
 
 
-app.use("/images", express.static(path.join(__dirname, "../src/images")));
+// app.use("/images", express.static(path.join(__dirname, "../src/images")));
 app.use(allowCors(routes))
 
 app.listen(port, () => {
