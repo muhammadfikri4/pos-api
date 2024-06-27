@@ -14,7 +14,7 @@ dotenv.config();
 
 app.use(cookieParser())
 app.use(cors({
-    origin: '*',
+    origin: 'https://pos-web-app-mu.vercel.app',
     methods: '*',
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use((req: Request, res: Response, next: NextFunction) => {
-    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Origin', 'https://pos-web-app-mu.vercel.app');
     res.header('Access-Control-Allow-Methods', "GET,OPTIONS,PATCH,DELETE,POST,PUT");
     res.header('Access-Control-Allow-Credentials', 'true');
     if (req.method === 'OPTIONS') {
