@@ -14,7 +14,7 @@ dotenv.config();
 
 const allowCors = (fn: RequestHandler) => async (req: Request, res: Response, next: NextFunction) => {
     res.setHeader('Access-Control-Allow-Credentials', "true")
-    res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader('Access-Control-Allow-Origin', 'https://pos-web-app-mu.vercel.app')
     // another common pattern
     // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
     res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
