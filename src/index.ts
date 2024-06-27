@@ -1,6 +1,6 @@
 import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
-import express, { type NextFunction, type Request, type Response } from 'express'
+import express from 'express'
 // import { dbconect } from './config'
 import bodyParser from 'body-parser'
 import cors from 'cors'
@@ -13,26 +13,16 @@ dotenv.config();
 // dbconect()
 
 app.use(cookieParser())
-app.use(cors())
+app.use(cors({
+    origin: 'https://pos-web-app-mu.vercel.app',
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token', 'X-Requested-With', 'Accept', 'Accept-Version', 'Content-Length', 'Content-MD5', 'Content-Type', 'Date', 'X-Api-Version'],
+    credentials: true,
+}));
 
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.use((req: Request, res: Response, next: NextFunction) => {
-    console.log('CORS request:', req.method, req.headers.origin);
-    // console.log(req)
-    // res.setHeader('Access-Control-Allow-Origin', 'https://pos-web-app-mu.vercel.app');
-    res.setHeader('Access-Control-Allow-Methods', "GET,OPTIONS,PATCH,DELETE,POST,PUT");
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    req.headers['access-control-allow-origin'] = 'https://pos-web-app-mu.vercel.app';
-    if (req.method === 'OPTIONS') {
-        res.status(200).end();
-        return;
-    };
-    next();
-});
-// app.use("/images", express.static(path.join(__dirname, "../src/images")));
 app.use(routes)
 
 app.listen(port, () => {
