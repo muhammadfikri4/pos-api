@@ -1,6 +1,6 @@
 import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
-import express from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 // import { dbconect } from './config'
 import bodyParser from 'body-parser'
 import cors from 'cors'
@@ -18,6 +18,11 @@ app.use(cors({
     credentials: true,
     preflightContinue: false
 }));
+app.use(function (req: Request, res: Response, next: NextFunction) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 app.options('*', cors());
 app.use(cookieParser())
 
