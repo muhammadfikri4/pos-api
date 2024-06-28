@@ -112,7 +112,6 @@ export const UpdatePaymentTransactionService = async (id: string, totalPaid: num
 
 export const handleWebhookTransactionService = async (settlementTime: string, signatureKey: string, transactionId: string, transactionStatus: string, totalPaid: number) => {
     if (transactionId && transactionStatus === 'settlement') {
-        console.log("settlement", { transactionId, transactionStatus })
         const transaction = await getTransactionById(transactionId)
         if (transaction) {
             const findTransaction = await getTransactionById(transactionId as string)
