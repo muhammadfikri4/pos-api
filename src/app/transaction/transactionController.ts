@@ -41,7 +41,7 @@ export const createTransactionController = async (
     name,
     paymentMethod,
   });
-
+  console.log({ transactionCreation })
   if ((transactionCreation as HttpError)?.message) {
     return HandleResponse(
       res,
