@@ -19,10 +19,10 @@ export const createTransactionService = async ({ details, email, name, paymentMe
     if ((validateTransaction as HttpError)?.message) {
         return AppError((validateTransaction as HttpError).message, (validateTransaction as HttpError).statusCode, (validateTransaction as HttpError).code)
     }
-
+    console.log("Before Create", { validateTransaction })
     const transactionCreation = await createTransaction({ email, name, paymentMethod, details })
     const detailTransaction = details?.map(detail => ({ ...detail, transactionId: transactionCreation.id }))
-
+    console.log("After Create", { detailTransaction })
     const validateTransactionDetail = await createTransactionDetailValidate(detailTransaction as TransactionDetailDTO[])
 
     if ((validateTransactionDetail as HttpError)?.message) {
