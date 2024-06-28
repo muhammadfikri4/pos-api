@@ -281,27 +281,18 @@ export const handleWebhookTransactionController = async (
     transaction_status,
     gross_amount,
   } = req.body as WebhookMidtransTransactionBodyDTO;
-  console.log(req.body);
+
   const paymentWebhook = await handleWebhookTransactionService(
     settlement_time as string,
     signature_key as string,
     order_id as string,
-    transaction_status as string
+    transaction_status as string,
+    Number(gross_amount)
   );
 
-  const updatePayment = await UpdatePaymentTransactionService(
-    order_id as string,
-    Number(gross_amount as string)
-  );
-  if ((updatePayment as HttpError)?.message) {
-    return HandleResponse(
-      res,
-      (updatePayment as HttpError).statusCode,
-      (updatePayment as HttpError).code,
-      (updatePayment as HttpError).message
-    );
+  if (!paymentWebhook) {
+    return HandleResponse(res, 400, MESSAGE_CODE.BAD_REQUEST, MESSAGES.ERROR.PAYMENT.FAILED)
   }
-
   console.log({ paymentWebhook });
   return HandleResponse(
     res,

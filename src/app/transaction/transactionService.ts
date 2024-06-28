@@ -110,8 +110,9 @@ export const UpdatePaymentTransactionService = async (id: string, totalPaid: num
     return updatePayment
 }
 
-export const handleWebhookTransactionService = async (settlementTime: string, signatureKey: string, transactionId: string, transactionStatus: string) => {
+export const handleWebhookTransactionService = async (settlementTime: string, signatureKey: string, transactionId: string, transactionStatus: string, totalPaid: number) => {
     if (transactionId && transactionStatus === 'settlement') {
+        console.log("settlement", { transactionId, transactionStatus })
         const transaction = await getTransactionById(transactionId)
         if (transaction) {
             const findTransaction = await getTransactionById(transactionId as string)
@@ -121,7 +122,7 @@ export const handleWebhookTransactionService = async (settlementTime: string, si
                 return []
             }) || []
             await Promise.all(promises)
-            const updateTransaction = await updateStatusTransaction(transactionId, 'PAID', settlementTime, signatureKey);
+            const updateTransaction = await updateStatusTransaction(transactionId, 'PAID', settlementTime, signatureKey, totalPaid, findTransaction?.totalAmount);
             await createHistoryBaseOnTransaction(transactionId, 'PAID')
             await createIncomeByTransaction(transactionId, transaction.totalAmount)
             return updateTransaction

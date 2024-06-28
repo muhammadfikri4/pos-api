@@ -109,7 +109,9 @@ export const updateStatusTransaction = async (
   transactionId: string,
   status: StatusTransaction,
   settlementTime?: string,
-  signatureKey?: string
+  signatureKey?: string,
+  totalPaid?: number,
+  totalAmount?: number,
 ) => {
   return await prisma.transaction.update({
     where: {
@@ -117,6 +119,8 @@ export const updateStatusTransaction = async (
     },
     data: {
       status,
+      totalPaid,
+      totalReturn: (totalPaid as number) - (totalAmount as number),
       settlementTime: settlementTime ? settlementTime : null,
       signatureKey: signatureKey ? signatureKey : null,
     },
