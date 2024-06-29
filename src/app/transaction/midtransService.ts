@@ -42,6 +42,7 @@ export const createMidtransTransaction = async (
 
   try {
     const midtransTransaction = await snap.createTransaction(parameter);
+    console.time("createMidtransTransaction")
     return {
       token: midtransTransaction.token,
       redirect_url: `${midtransTransaction.redirect_url}#/other-qris`,
