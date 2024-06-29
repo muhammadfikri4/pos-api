@@ -15,20 +15,20 @@ export const createMidtransTransaction = async (
   name: string,
   email: string
 ) => {
-  const itemDetails = await Promise.all(details.map(async (item: TransactionDetailDTO) => {
-    const getById = await getProductById(item.productId)
-    if (getById) {
-
-      return {
-        id: item?.productId,
-        price: getById?.price,
-        quantity: item.quantity,
-        name: getById?.name
-      }
-    }
-  }))
 
   try {
+    const itemDetails = await Promise.all(details.map(async (item: TransactionDetailDTO) => {
+      const getById = await getProductById(item.productId)
+      if (getById) {
+
+        return {
+          id: item?.productId,
+          price: getById?.price,
+          quantity: item.quantity,
+          name: getById?.name
+        }
+      }
+    }))
     const parameter = {
       transaction_id: transaction.id,
       transaction_details: {
