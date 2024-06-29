@@ -38,7 +38,7 @@ export const createTransactionValidate = async ({
     );
   }
 
-  if ((details?.length as number) < 1) {
+  if (((details?.length as number) < 1) || !details ) {
     return AppError(
       MESSAGES.ERROR.INVALID.PRODUCT_ITEM,
       400,
@@ -55,7 +55,7 @@ export const createTransactionValidate = async ({
 
   if (hasInvalidProduct) {
     return AppError(
-      MESSAGES.ERROR.INVALID.PRODUCT_ITEM,
+      MESSAGES.ERROR.NOT_FOUND.PRODUCT,
       400,
       MESSAGE_CODE.BAD_REQUEST
     );
