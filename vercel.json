@@ -17,20 +17,7 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "src/index.ts",
-      "methods": [
-        "GET",
-        "POST",
-        "PUT",
-        "PATCH",
-        "DELETE"
-      ],
-      "headers": {
-        "Access-Control-Allow-Origin": "/api/*",
-        "Access-Control-Allow-Credentials": "true",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-CSRF-Token"
-      }
+      "dest": "src/index.ts"
     }
   ]
 }
