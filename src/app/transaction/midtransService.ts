@@ -1,5 +1,4 @@
 import Midtrans from "midtrans-client";
-import pLimit from "p-limit";
 import { ENV } from "../../libs";
 import { getProductById } from "../product/productRepo";
 import { TransactionBodyDTO, TransactionDetailDTO } from "./transactionDTO";
@@ -16,9 +15,7 @@ export const createMidtransTransaction = async (
   name: string,
   email: string
 ) => {
-
-  const limit = pLimit(5)
-  const itemDetails = await Promise.all(details.map((item: TransactionDetailDTO) => limit(async () => {
+  const itemDetails = await Promise.all(details.map(async (item: TransactionDetailDTO) => {
     const getById = await getProductById(item.productId)
     if (getById) {
 
@@ -29,7 +26,7 @@ export const createMidtransTransaction = async (
         name: getById?.name
       }
     }
-  })))
+  }))
 
   try {
     const parameter = {
