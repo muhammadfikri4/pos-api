@@ -60,6 +60,8 @@ export const createTransactionController = async (
       transactionCreation
     );
   } else if (paymentMethod === "QRIS") {
+    console.log(paymentMethod);
+    
     const midtransResponse = await createMidtransTransaction(
       transactionCreation as TransactionBodyDTO,
       details as TransactionDetailDTO[],
