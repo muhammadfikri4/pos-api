@@ -29,7 +29,7 @@ export const MESSAGES = {
             IMAGE_SIZE: "Image size is too large, max 5mb",
             PRODUCT_ITEM: "There must be at least 1 product item",
             TRANSACTION_ORDER: "Orders cannot exceed the stock amount",
-            STATUS: "Status is invalid"
+            STATUS: "Status is invalid",
         },
         UNAUTHORIZED: {
             AUTH: "If you are not logged in, please log in first"
