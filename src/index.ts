@@ -26,10 +26,11 @@ app.use(function (req: Request, res: Response, next: NextFunction) {
 app.options('*', cors());
 app.use(cookieParser())
 
+
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(routes)
+app.use("/api" , routes)
 
 app.listen(port, () => {
     console.log(`Run at port ${port}🚀`)
