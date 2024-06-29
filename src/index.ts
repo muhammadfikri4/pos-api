@@ -18,11 +18,11 @@ app.use(cors({
     credentials: true,
     preflightContinue: false
 }));
-app.use(function (req: Request, res: Response, next: NextFunction) {
-    res.header("Access-Control-Allow-Origin", "/api/*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+// app.use(function (req: Request, res: Response, next: NextFunction) {
+//     res.header("Access-Control-Allow-Origin", "/api/*");
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     next();
+// });
 app.options('*', cors());
 app.use(cookieParser())
 
