@@ -109,7 +109,9 @@ export const updateStatusTransaction = async (
   transactionId: string,
   status: StatusTransaction,
   settlementTime?: string,
-  signatureKey?: string
+  signatureKey?: string,
+  totalPaid?: number,
+  totalAmount?: number,
 ) => {
   return await prisma.transaction.update({
     where: {
@@ -117,6 +119,8 @@ export const updateStatusTransaction = async (
     },
     data: {
       status,
+      totalPaid,
+      totalReturn: (totalPaid as number) - (totalAmount as number),
       settlementTime: settlementTime ? settlementTime : null,
       signatureKey: signatureKey ? signatureKey : null,
     },
@@ -150,11 +154,11 @@ export const getTransactionDetailById = async (id: string) => {
   });
 };
 
-export const createHistoryBaseOnTransaction = (
+export const createHistoryBaseOnTransaction = async (
   transactionId: string,
   status: StatusTransaction
 ) => {
-  return prisma.history.create({
+  return await prisma.history.create({
     data: {
       status,
       transactionId,
@@ -162,19 +166,19 @@ export const createHistoryBaseOnTransaction = (
   });
 };
 
-export const getHistoryByTransactionId = (transactionId: string) => {
-  return prisma.history.findMany({
+export const getHistoryByTransactionId = async (transactionId: string) => {
+  return await prisma.history.findMany({
     where: {
       transactionId: transactionId,
     },
   });
 };
 
-export const createIncomeByTransaction = (
+export const createIncomeByTransaction = async (
   transactionId: string,
   nominal: number
 ) => {
-  return prisma.income.create({
+  return await prisma.income.create({
     data: {
       nominal,
       transactionId,

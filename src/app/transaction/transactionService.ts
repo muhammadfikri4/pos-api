@@ -19,7 +19,6 @@ export const createTransactionService = async ({ details, email, name, paymentMe
     if ((validateTransaction as HttpError)?.message) {
         return AppError((validateTransaction as HttpError).message, (validateTransaction as HttpError).statusCode, (validateTransaction as HttpError).code)
     }
-
     const transactionCreation = await createTransaction({ email, name, paymentMethod, details })
     const detailTransaction = details?.map(detail => ({ ...detail, transactionId: transactionCreation.id }))
 
@@ -30,6 +29,7 @@ export const createTransactionService = async ({ details, email, name, paymentMe
     }
     await createTransactionDetail({ details: detailTransaction })
     await createHistoryBaseOnTransaction(transactionCreation.id, 'UNPAID')
+    console.time('createIncomeByTransaction')
     return transactionCreation
 }
 
@@ -110,7 +110,7 @@ export const UpdatePaymentTransactionService = async (id: string, totalPaid: num
     return updatePayment
 }
 
-export const handleWebhookTransactionService = async (settlementTime: string, signatureKey: string, transactionId: string, transactionStatus: string) => {
+export const handleWebhookTransactionService = async (settlementTime: string, signatureKey: string, transactionId: string, transactionStatus: string, totalPaid: number) => {
     if (transactionId && transactionStatus === 'settlement') {
         const transaction = await getTransactionById(transactionId)
         if (transaction) {
@@ -121,7 +121,7 @@ export const handleWebhookTransactionService = async (settlementTime: string, si
                 return []
             }) || []
             await Promise.all(promises)
-            const updateTransaction = await updateStatusTransaction(transactionId, 'PAID', settlementTime, signatureKey);
+            const updateTransaction = await updateStatusTransaction(transactionId, 'PAID', settlementTime, signatureKey, totalPaid, findTransaction?.totalAmount);
             await createHistoryBaseOnTransaction(transactionId, 'PAID')
             await createIncomeByTransaction(transactionId, transaction.totalAmount)
             return updateTransaction

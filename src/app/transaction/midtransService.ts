@@ -4,7 +4,7 @@ import { getProductById } from "../product/productRepo";
 import { TransactionBodyDTO, TransactionDetailDTO } from "./transactionDTO";
 
 const snap = new Midtrans.Snap({
-  isProduction: false,
+  isProduction: true,
   serverKey: ENV.MIDTRANS_SERVER_KEY as string,
   clientKey: ENV.MIDTRANS_CLIENT_KEY as string,
 });
@@ -16,32 +16,34 @@ export const createMidtransTransaction = async (
   email: string
 ) => {
 
-  const parameter = {
-    transaction_id: transaction.id,
-    transaction_details: {
-      order_id: transaction.id,
-      gross_amount: transaction.totalAmount,
-    },
-    customer_details: {
-      name: name,
-      email,
-    },
-    item_details: await Promise.all(details.map(async (item: TransactionDetailDTO) => {
-      const getById = await getProductById(item.productId)
-      return {
-        id: item?.productId,
-        price: getById?.price,
-        quantity: item.quantity,
-        name: getById?.name
-      }
-    })),
-    payment_type: "qris",
-  };
-
-
-
   try {
+    const itemDetails = await Promise.all(details.map(async (item: TransactionDetailDTO) => {
+      const getById = await getProductById(item.productId)
+      if (getById) {
+
+        return {
+          id: item?.productId,
+          price: getById?.price,
+          quantity: item.quantity,
+          name: getById?.name
+        }
+      }
+    }))
+    const parameter = {
+      transaction_id: transaction.id,
+      transaction_details: {
+        order_id: transaction.id,
+        gross_amount: transaction.totalAmount,
+      },
+      customer_details: {
+        name: name,
+        email,
+      },
+      item_details: itemDetails,
+      payment_type: "qris",
+    };
     const midtransTransaction = await snap.createTransaction(parameter);
+    console.time("createMidtransTransaction")
     return {
       token: midtransTransaction.token,
       redirect_url: `${midtransTransaction.redirect_url}#/other-qris`,
