@@ -60,7 +60,6 @@ export const createTransactionController = async (
       transactionCreation
     );
   } else if (paymentMethod === "QRIS") {
-    console.log(paymentMethod);
     
     const midtransResponse = await createMidtransTransaction(
       transactionCreation as TransactionBodyDTO,
@@ -68,6 +67,7 @@ export const createTransactionController = async (
       name as string,
       email as string
     );
+    console.log(midtransResponse);
     if ((midtransResponse as HttpError)?.message) {
       return HandleResponse(
         res,
