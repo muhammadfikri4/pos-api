@@ -1,6 +1,6 @@
 import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
-import express, { NextFunction, Request, Response } from 'express'
+import express from 'express'
 // import { dbconect } from './config'
 import bodyParser from 'body-parser'
 import cors from 'cors'
@@ -18,12 +18,6 @@ app.use(cors({
     credentials: true,
     preflightContinue: false
 }));
-app.use(function (req: Request, res: Response, next: NextFunction) {
-    res.header("Access-Control-Allow-Origin", "https://pos-web-app-mu.vercel.app");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
-app.options('*', cors());
 app.use(cookieParser())
 
 app.use(express.json());
