@@ -55,7 +55,9 @@ export const MESSAGES = {
         },
         RELATED: {
             PRODUCT: "Product is used on other data"
-        }
+        },
+        PRINT: "Print failed",
+        BLUETOOTH: "Bluetooth not found"
     },
     SUCCESS: {
         USER: "User logged in successfully",
@@ -82,7 +84,7 @@ export const MESSAGES = {
         PAYMENT: "Payment success",
         INCOME: {
             GET: "Success to get income"
-        }
-
+        },
+        PRINT: "Print success"
     }
 }
