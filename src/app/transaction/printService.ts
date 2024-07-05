@@ -1,8 +1,8 @@
-import { AppError } from "utils/HttpError";
-import { getTransactionById } from "./transactionRepo";
-import { MESSAGES } from "utils/Messages";
-import { MESSAGE_CODE } from "utils/ErrorCode";
 import BTSerialPort from 'bluetooth-serial-port';
+import { MESSAGE_CODE } from "utils/ErrorCode";
+import { AppError } from "utils/HttpError";
+import { MESSAGES } from "utils/Messages";
+import { getTransactionById } from "./transactionRepo";
 
 export const printTransactionService = async (id: string) => {
   const transaction = await getTransactionById(id);
@@ -29,7 +29,7 @@ export const printTransactionService = async (id: string) => {
   const generateReceipt = () => {
     const ESC = '\x1B'; // ESC byte in hex notation
     const GS = '\x1D'; // GS byte in hex notation
-  
+
     const initializePrinter = ESC + '@'; // Initialize printer
     const doubleSizeText = GS + '!' + '\x04'; // Double size text
     const normalSizeText = GS + '!' + '\x00'; // Normal size text
@@ -37,10 +37,10 @@ export const printTransactionService = async (id: string) => {
     const boldOff = ESC + 'E' + '\x00'; // Bold off
     const underlineOn = ESC + '-' + '\x01'; // Underline on
     const underlineOff = ESC + '-' + '\x00'; // Underline off
-  
+
     const lineSeparator = '--------------------------------';
     const tearLine = ' - - - - - - - - - - - - - - - -';
-  
+
     const receipt = [];
     receipt.push(initializePrinter);
     receipt.push(doubleSizeText + "POS Product Receipt" + normalSizeText);
@@ -53,13 +53,13 @@ export const printTransactionService = async (id: string) => {
     receipt.push(boldOn + "Item");
     receipt.push("Qty    Price         Total" + boldOff);
     receipt.push(lineSeparator);
-  
+
     transaction.transactionDetails.forEach((product) => {
       const totalPrice = product.product.price * product.quantity;
       receipt.push(`${product.product.name}`);
       receipt.push(`${product.quantity.toString().padStart(2)}  ${formatRupiah(product.product.price).padStart(9)}  ${formatRupiah(totalPrice).padStart(9)}`);
     });
-  
+
     receipt.push(lineSeparator);
     receipt.push(
       `Total:           ${formatRupiah(transaction.totalAmount).padStart(9)}`
@@ -85,7 +85,7 @@ export const printTransactionService = async (id: string) => {
     receipt.push(lineSeparator);
     receipt.push("Item                        Qty");
     receipt.push(lineSeparator);
-  
+
     transaction.transactionDetails.forEach((product) => {
       receipt.push(`${product.product.name.padEnd(26).substring(0, 26)} ${product.quantity
         .toString()
@@ -93,8 +93,8 @@ export const printTransactionService = async (id: string) => {
       `);
     });
     receipt.push(lineSeparator);
-  
-  
+
+
     return receipt.join('\n');
   };
 
@@ -136,12 +136,12 @@ export const printTransactionService = async (id: string) => {
         }
       );
     },
-    function () {
-      return AppError(
-        MESSAGES.ERROR.BLUETOOTH,
-        500,
-        MESSAGE_CODE.INTERNAL_SERVER_ERROR
-      )
-    }
+    // function () {
+    //   return AppError(
+    //     MESSAGES.ERROR.BLUETOOTH,
+    //     500,
+    //     MESSAGE_CODE.INTERNAL_SERVER_ERROR
+    //   )
+    // }
   );
 };
