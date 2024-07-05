@@ -4,14 +4,20 @@
     {
       "src": "src/index.ts",
       "use": "@vercel/node",
-      "config": { "includeFiles": ["src/**"] }
+      "config": {
+        "includeFiles": [
+          "src/**"
+        ],
+        "commands": {
+          "build": "prisma generate && tsc"
+        }
+      }
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "src/index.ts",
-      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE"]
+      "dest": "src/index.ts"
     }
   ]
 }

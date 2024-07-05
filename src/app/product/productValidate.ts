@@ -1,4 +1,3 @@
-import { unlinkSync } from "fs"
 import { MESSAGE_CODE } from "../../utils/ErrorCode"
 import { AppError } from "../../utils/HttpError"
 import { MESSAGES } from "../../utils/Messages"

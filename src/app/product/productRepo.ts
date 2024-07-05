@@ -54,6 +54,7 @@ export const createProduct = async ({ name, price, categoryId, image, stock }: P
             categoryId: categoryId as string,
             image: image as string,
             price: price as number,
+            totalSold: 0,
             stock: stock as number
         }
     })

@@ -6,10 +6,10 @@ import { MESSAGES } from '../../utils/Messages'
 import { Meta } from '../../utils/Meta'
 import { getProductById, updateProductStock } from '../product/productRepo'
 import { TransactionBodyDTO, TransactionDetailDTO } from './transactionDTO'
-import { getTransactionsMapper } from './transactionMapper'
-import { createHistoryBaseOnTransaction, createIncomeByTransaction, createTransaction, createTransactionDetail, getHistoryByTransactionId, getTransaction, getTransactionById, getTransactionCount, getTransactionDetailByTransactionId, updateStatusTransaction } from './transactionRepo'
+import { getTransactionByIdMapper, getTransactionsMapper } from './transactionMapper'
+import { createHistoryBaseOnTransaction, createIncomeByTransaction, createTransaction, createTransactionDetail, getHistoryByTransactionId, getTransaction, getTransactionById, getTransactionCount, getTransactionDetailByTransactionId, updatePaymentTransaction, updateStatusTransaction } from './transactionRepo'
 import { IFilterTransaction, TransactionModelTypes } from './transactionTypes'
-import { createTransactionDetailValidate, createTransactionValidate, updateStatusToPaidTransactionValidate } from './transactionValidate'
+import { createTransactionDetailValidate, createTransactionValidate, updatePaymentTransactionValidate, updateStatusToPaidTransactionValidate } from './transactionValidate'
 
 dotenv.config()
 
@@ -19,7 +19,6 @@ export const createTransactionService = async ({ details, email, name, paymentMe
     if ((validateTransaction as HttpError)?.message) {
         return AppError((validateTransaction as HttpError).message, (validateTransaction as HttpError).statusCode, (validateTransaction as HttpError).code)
     }
-
     const transactionCreation = await createTransaction({ email, name, paymentMethod, details })
     const detailTransaction = details?.map(detail => ({ ...detail, transactionId: transactionCreation.id }))
 
@@ -30,6 +29,7 @@ export const createTransactionService = async ({ details, email, name, paymentMe
     }
     await createTransactionDetail({ details: detailTransaction })
     await createHistoryBaseOnTransaction(transactionCreation.id, 'UNPAID')
+    console.time('createIncomeByTransaction')
     return transactionCreation
 }
 
@@ -69,10 +69,12 @@ export const UpdateToPaidTransactionService = async ({ id }: TransactionBodyDTO)
 
 export const getTransactionByIdService = async (id: string) => {
     const transaction = await getTransactionById(id)
+
     if (!transaction) {
         return AppError(MESSAGES.ERROR.NOT_FOUND.TRANSACTION, 404, MESSAGE_CODE.NOT_FOUND)
     }
-    return transaction
+    const transactionById = getTransactionByIdMapper(transaction as unknown as TransactionModelTypes)
+    return transactionById
 }
 
 export const getHistoryByTransactionIdService = async (id: string) => {
@@ -98,7 +100,17 @@ export const customUpdateStatusTransactionService = async (id: string, status: S
     return updateTransaction
 }
 
-export const handleWebhookTransactionService = async (settlementTime: string, signatureKey: string, transactionId: string, transactionStatus: string) => {
+export const UpdatePaymentTransactionService = async (id: string, totalPaid: number) => {
+    const validate = await updatePaymentTransactionValidate(id, totalPaid)
+    if ((validate as HttpError)?.message) {
+        return AppError((validate as HttpError).message, (validate as HttpError).statusCode, (validate as HttpError).code)
+    }
+    const transaction = await getTransactionById(id)
+    const updatePayment = await updatePaymentTransaction(id, totalPaid, transaction?.totalAmount as number);
+    return updatePayment
+}
+
+export const handleWebhookTransactionService = async (settlementTime: string, signatureKey: string, transactionId: string, transactionStatus: string, totalPaid: number) => {
     if (transactionId && transactionStatus === 'settlement') {
         const transaction = await getTransactionById(transactionId)
         if (transaction) {
@@ -109,7 +121,7 @@ export const handleWebhookTransactionService = async (settlementTime: string, si
                 return []
             }) || []
             await Promise.all(promises)
-            const updateTransaction = await updateStatusTransaction(transactionId, 'PAID', settlementTime, signatureKey);
+            const updateTransaction = await updateStatusTransaction(transactionId, 'PAID', settlementTime, signatureKey, totalPaid, findTransaction?.totalAmount);
             await createHistoryBaseOnTransaction(transactionId, 'PAID')
             await createIncomeByTransaction(transactionId, transaction.totalAmount)
             return updateTransaction

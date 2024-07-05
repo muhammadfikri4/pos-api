@@ -8,9 +8,9 @@ export interface CategoryProductModelTypes {
 export interface ProductTransactionModelTypes {
     id: string,
     name: string,
-    price: number,
+    price?: number,
     image: string,
-    stock: number,
+    stock?: number,
     category: {
         id: string,
         name: string,
@@ -34,6 +34,8 @@ export interface TransactionModelTypes {
     paymentMethod: PaymentMethod,
     totalQuantity: number,
     totalAmount: number,
+    totalPaid: number,
+    totalReturn: number,
     settlementTime: string,
     signatureKey: string,
     serialNumber: number,
