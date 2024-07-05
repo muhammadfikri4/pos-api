@@ -14,11 +14,10 @@
       }
     }
   ],
-   "routes": [
+  "routes": [
     {
       "src": "/(.*)",
       "dest": "src/index.ts"
     }
-  ],
-  "installCommand": "npm install --legacy-peer-deps"
+  ]
 }
