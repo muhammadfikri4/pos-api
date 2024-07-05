@@ -1,4 +1,3 @@
-import { getProductByIdService } from "app/product/productService";
 import { MESSAGE_CODE } from "../../utils/ErrorCode";
 import { AppError } from "../../utils/HttpError";
 import { MESSAGES } from "../../utils/Messages";
@@ -38,7 +37,7 @@ export const createTransactionValidate = async ({
     );
   }
 
-  if (((details?.length as number) < 1) || !details ) {
+  if (((details?.length as number) < 1) || !details) {
     return AppError(
       MESSAGES.ERROR.INVALID.PRODUCT_ITEM,
       400,

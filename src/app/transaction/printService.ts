@@ -1,7 +1,7 @@
 import BTSerialPort from 'bluetooth-serial-port';
-import { MESSAGE_CODE } from "utils/ErrorCode";
-import { AppError } from "utils/HttpError";
-import { MESSAGES } from "utils/Messages";
+import { MESSAGE_CODE } from "../../utils/ErrorCode";
+import { AppError } from "../../utils/HttpError";
+import { MESSAGES } from "../../utils/Messages";
 import { getTransactionById } from "./transactionRepo";
 
 export const printTransactionService = async (id: string) => {
