@@ -42,7 +42,6 @@
     "multer": "^1.4.5-lts.1",
     "multer-storage-cloudinary": "^4.0.0",
     "mysql": "^2.18.1",
-    "node-bluetooth-serial-port": "^2.2.7",
     "tsconfig-paths": "^4.2.0",
     "uuid": "^10.0.0"
   },

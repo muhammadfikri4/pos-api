@@ -1,4 +1,4 @@
-import BTSerialPort from 'node-bluetooth-serial-port';
+import BTSerialPort from 'bluetooth-serial-port';
 import { MESSAGE_CODE } from "../../utils/ErrorCode";
 import { AppError } from "../../utils/HttpError";
 import { MESSAGES } from "../../utils/Messages";
