@@ -2,10 +2,16 @@
   "version": 2,
   "builds": [
     {
-      "src": "Dockerfile",
-      "use": "@vercel/docker"
+      "src": "package.json",
+      "use": "@vercel/node",
+      "config": {
+        "distDir": "dist"
+      }
     }
   ],
+  "scripts": {
+    "build": "bash .vercel-build.sh"
+  },
   "routes": [
     {
       "src": "/(.*)",
