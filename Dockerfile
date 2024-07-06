@@ -7,23 +7,23 @@ RUN apt-get update && apt-get install -y libbluetooth-dev
 # Set working directory
 WORKDIR /usr/src/app
 
-# Copy package.json dan package-lock.json ke container
-COPY package*.json ./
+# Copy package.json dan yarn.lock ke container
+COPY package.json yarn.lock ./
 
-# Install dependencies
-RUN npm install
+# Install dependencies menggunakan yarn
+RUN yarn install
 
 # Copy seluruh source code ke working directory
 COPY . .
 
 # Install Prisma CLI
-RUN npm install @prisma/cli --save-dev
+RUN yarn add @prisma/cli --dev
 
 # Generate Prisma client
-RUN npx prisma generate
+RUN yarn prisma generate
 
 # Build TypeScript code
-RUN npm run build
+RUN yarn build
 
 # Expose port 5000
 EXPOSE 5000
