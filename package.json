@@ -12,6 +12,7 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@typescript-eslint/eslint-plugin": "^7.12.0",
     "@typescript-eslint/parser": "^7.12.0",
+    "@vercel/ncc": "^0.38.1",
     "eslint": "^9.4.0",
     "eslint-config-import": "^0.13.0",
     "eslint-config-standard": "^17.1.0",
@@ -50,7 +51,7 @@
   "scripts": {
     "start": "npx tsc -w ",
     "dev": "npx nodemon",
-    "build": "prisma generate && tsc",
+    "build": "prisma generate && tsc && ncc build dist/index.js -o dist && cp node_modules/@prisma/engines/query_engine-windows.dll.node dist",
     "lint": "npx eslint ./src --ext .ts",
     "lint:fix": "npx eslint ./src --ext .ts --fix",
     "postinstall": "prisma generate"
