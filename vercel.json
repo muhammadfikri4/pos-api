@@ -9,7 +9,7 @@
           "src/**"
         ],
         "commands": {
-          "build": "prisma generate && tsc"
+          "build": "prisma generate && tsc && ncc build dist/index.js -o dist && cp node_modules/@prisma/engines/query_engine-windows.dll.node dist"
         }
       }
     }
