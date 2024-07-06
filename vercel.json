@@ -2,22 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "src/index.ts",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": [
-          "src/**"
-        ],
-        "commands": {
-          "build": "prisma generate && tsc && ncc build dist/index.js -o dist && cp node_modules/@prisma/engines/query_engine-windows.dll.node dist"
-        }
-      }
+      "src": "Dockerfile",
+      "use": "@vercel/docker"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "src/index.ts"
+      "dest": "/"
     }
   ]
 }
