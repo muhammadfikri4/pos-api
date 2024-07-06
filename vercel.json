@@ -9,9 +9,6 @@
       }
     }
   ],
-  "scripts": {
-    "build": "bash .vercel-build.sh"
-  },
   "routes": [
     {
       "src": "/(.*)",
