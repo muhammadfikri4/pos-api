@@ -1,8 +1,8 @@
-import { MESSAGE_CODE } from '../../utils/ErrorCode'
-import { AppError } from '../../utils/HttpError'
-import { MESSAGES } from '../../utils/Messages'
+import { MESSAGE_CODE } from "../../utils/ErrorCode";
+import { AppError } from "../../utils/HttpError";
+import { MESSAGES } from "../../utils/Messages";
 import { getTransactionById } from "./transactionRepo";
-import BTSerialPort from 'bluetooth-serial-port';
+import BTSerialPort from "bluetooth-serial-port";
 
 export const printTransactionService = async (id: string) => {
   const transaction = await getTransactionById(id);
@@ -22,30 +22,61 @@ export const printTransactionService = async (id: string) => {
     );
   }
 
+  interface IFormatDate {
+    year: "numeric" | "2-digit";
+    month: "numeric" | "2-digit" | "long" | "short" | "narrow";
+    day: "numeric" | "2-digit";
+  }
+
+  interface IFormatTime {
+    hour: "numeric" | "2-digit";
+    minute: "numeric" | "2-digit";
+  }
+
+  function formatDate(isoDate: Date) {
+    const date = new Date(isoDate);
+
+    const optionsDate: IFormatDate = {
+      year: "numeric",
+      month: "long",
+      day: "2-digit",
+    };
+
+    const optionsTime: IFormatTime = {
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+
+    const formattedDate = date.toLocaleDateString("id-ID", optionsDate);
+    const formattedTime = date.toLocaleTimeString("id-ID", optionsTime);
+
+    return `${formattedDate}, ${formattedTime}`;
+  }
+
   const formatRupiah = (number: number) => {
-    return `Rp${number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
+    return `Rp${number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")}`;
   };
 
   const generateReceipt = () => {
-    const ESC = '\x1B'; // ESC byte in hex notation
-    const GS = '\x1D'; // GS byte in hex notation
-  
-    const initializePrinter = ESC + '@'; // Initialize printer
-    const doubleSizeText = GS + '!' + '\x04'; // Double size text
-    const normalSizeText = GS + '!' + '\x00'; // Normal size text
-    const boldOn = ESC + 'E' + '\x01'; // Bold on
-    const boldOff = ESC + 'E' + '\x00'; // Bold off
-    const underlineOn = ESC + '-' + '\x01'; // Underline on
-    const underlineOff = ESC + '-' + '\x00'; // Underline off
-  
-    const lineSeparator = '--------------------------------';
-    const tearLine = ' - - - - - - - - - - - - - - - -';
-  
+    const ESC = "\x1B"; // ESC byte in hex notation
+    const GS = "\x1D"; // GS byte in hex notation
+
+    const initializePrinter = ESC + "@"; // Initialize printer
+    const doubleSizeText = GS + "!" + "\x04"; // Double size text
+    const normalSizeText = GS + "!" + "\x00"; // Normal size text
+    const boldOn = ESC + "E" + "\x01"; // Bold on
+    const boldOff = ESC + "E" + "\x00"; // Bold off
+    const underlineOn = ESC + "-" + "\x01"; // Underline on
+    const underlineOff = ESC + "-" + "\x00"; // Underline off
+
+    const lineSeparator = "--------------------------------";
+    const tearLine = " - - - - - - - - - - - - - - - -";
+
     const receipt = [];
     receipt.push(initializePrinter);
     receipt.push(doubleSizeText + "POS Product Receipt" + normalSizeText);
     receipt.push(lineSeparator);
-    receipt.push(`Tanggal: ${new Date().toLocaleDateString("id-ID")}`);
+    receipt.push(`Tanggal: ${formatDate(transaction.createdAt as Date)}`);
     receipt.push(`Serial: ${transaction.serialNumber}`);
     receipt.push(`Name: ${transaction.name}`);
     receipt.push(`Email: ${transaction.email}`);
@@ -53,13 +84,15 @@ export const printTransactionService = async (id: string) => {
     receipt.push(boldOn + "Item");
     receipt.push("Qty    Price         Total" + boldOff);
     receipt.push(lineSeparator);
-  
+
     transaction.transactionDetails.forEach((product) => {
       const totalPrice = product.product.price * product.quantity;
       receipt.push(`${product.product.name}`);
-      receipt.push(`${product.quantity.toString().padStart(2)}  ${formatRupiah(product.product.price).padStart(9)}  ${formatRupiah(totalPrice).padStart(9)}`);
+      receipt.push(
+        `${product.quantity.toString().padStart(2)}  ${formatRupiah(product.product.price).padStart(9)}  ${formatRupiah(totalPrice).padStart(9)}`
+      );
     });
-  
+
     receipt.push(lineSeparator);
     receipt.push(
       `Total:           ${formatRupiah(transaction.totalAmount).padStart(9)}`
@@ -71,21 +104,23 @@ export const printTransactionService = async (id: string) => {
       `Change:          ${formatRupiah(transaction.totalReturn).padStart(9)}`
     );
     receipt.push(lineSeparator);
-    receipt.push(underlineOn + "Terima kasih telah berbelanja di Toko kami!" + underlineOff);
+    receipt.push(
+      underlineOn + "Terima kasih telah berbelanja di Toko kami!" + underlineOff
+    );
     receipt.push("Selalu dekat, selalu ada.");
-    receipt.push("")
-    receipt.push("")
+    receipt.push("");
+    receipt.push("");
     receipt.push(tearLine);
-    receipt.push("")
-    receipt.push("")
+    receipt.push("");
+    receipt.push("");
     receipt.push(doubleSizeText + "Kitchen Receipt" + normalSizeText);
     receipt.push(lineSeparator);
-    receipt.push(`Tanggal: ${new Date().toLocaleDateString("id-ID")}`);
+    receipt.push(`Tanggal: ${formatDate(transaction.createdAt as Date)}`);
     receipt.push(`Serial: ${transaction.serialNumber}`);
     receipt.push(lineSeparator);
     receipt.push("Item                        Qty");
     receipt.push(lineSeparator);
-  
+
     transaction.transactionDetails.forEach((product) => {
       receipt.push(`${product.product.name.padEnd(26).substring(0, 26)} ${product.quantity
         .toString()
@@ -93,9 +128,8 @@ export const printTransactionService = async (id: string) => {
       `);
     });
     receipt.push(lineSeparator);
-  
-  
-    return receipt.join('\n');
+
+    return receipt.join("\n");
   };
 
   let btSerial = new BTSerialPort.BluetoothSerialPort();
@@ -115,24 +149,26 @@ export const printTransactionService = async (id: string) => {
           let printCommands = encoder.encode(receiptContent + "\n\n\n\n");
 
           // Write commands to printer
-          btSerial.write(printCommands as any, function (err: any, bytesWritten?: any) {
-            if (err) {
-              return AppError(
-                MESSAGES.ERROR.PRINT,
-                500,
-                MESSAGE_CODE.INTERNAL_SERVER_ERROR
-              )
+          btSerial.write(
+            printCommands as any,
+            function (err: any, bytesWritten?: any) {
+              if (err) {
+                return AppError(
+                  MESSAGES.ERROR.PRINT,
+                  500,
+                  MESSAGE_CODE.INTERNAL_SERVER_ERROR
+                );
+              }
+              btSerial.close();
             }
-            btSerial.close();
-
-          });
+          );
         },
         function () {
           return AppError(
             MESSAGES.ERROR.BLUETOOTH,
             500,
             MESSAGE_CODE.INTERNAL_SERVER_ERROR
-          )
+          );
         }
       );
     },
@@ -141,7 +177,7 @@ export const printTransactionService = async (id: string) => {
         MESSAGES.ERROR.BLUETOOTH,
         500,
         MESSAGE_CODE.INTERNAL_SERVER_ERROR
-      )
+      );
     }
   );
 };
