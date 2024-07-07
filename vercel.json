@@ -2,14 +2,22 @@
   "version": 2,
   "builds": [
     {
-      "src": "dockerfile",
-      "use": "@vercel/docker"
+      "src": "src/index.ts",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [
+          "src/**"
+        ],
+        "commands": {
+          "build": "prisma generate && tsc"
+        }
+      }
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/"
+      "dest": "src/index.ts"
     }
   ]
 }
