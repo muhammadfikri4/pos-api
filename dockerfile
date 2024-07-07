@@ -1,8 +1,8 @@
 # Gunakan image Node.js sebagai base image
-FROM node:18
+FROM node:20.11.1
 
 # Set work directory
-WORKDIR /usr/src/app
+WORKDIR /src
 
 # Salin package.json dan yarn.lock
 COPY package.json yarn.lock ./
@@ -12,9 +12,6 @@ RUN yarn install
 
 # Salin semua file ke dalam container
 COPY . .
-
-# Generate prisma
-RUN npx prisma generate
 
 # Build TypeScript
 RUN yarn build
