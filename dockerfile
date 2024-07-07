@@ -4,11 +4,11 @@ FROM node:18
 # Set work directory
 WORKDIR /usr/src/app
 
-# Salin package.json dan package-lock.json
-COPY package*.json ./
+# Salin package.json dan yarn.lock
+COPY package.json yarn.lock ./
 
-# Install dependencies
-RUN npm install
+# Install dependencies menggunakan Yarn
+RUN yarn install
 
 # Salin semua file ke dalam container
 COPY . .
@@ -17,7 +17,7 @@ COPY . .
 RUN npx prisma generate
 
 # Build TypeScript
-RUN npm run build
+RUN yarn build
 
 # Expose port
 EXPOSE 5000
