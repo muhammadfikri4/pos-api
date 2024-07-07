@@ -53,6 +53,7 @@ export const getTransaction = async ({
   perPage,
   email,
   name,
+  status
 }: IFilterTransaction) => {
   return await prisma.transaction.findMany({
     where: {
@@ -62,6 +63,7 @@ export const getTransaction = async ({
       name: {
         contains: name,
       },
+      status: status || undefined
     },
     include: {
       transactionDetails: {
@@ -202,4 +204,42 @@ export const updatePaymentTransaction = async (
       settlementTime: new Date().toISOString(),
     },
   });
+}
+
+export const getTodayTransaction = async () => {
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+
+  const endOfDay = new Date();
+  endOfDay.setHours(23, 59, 59, 999);
+
+  return await prisma.transaction.findMany({
+    where: {
+      createdAt: {
+        gte: startOfDay,
+        lt: endOfDay,
+      },
+    },
+  });
+}
+
+export const getWeekTransaction = async () => {
+  const now = new Date();
+  const firstDayOfWeek = now.getDate() - now.getDay();
+  const lastDayOfWeek = firstDayOfWeek + 6;
+
+  const startOfWeek = new Date(now.setDate(firstDayOfWeek));
+  startOfWeek.setHours(0, 0, 0, 0);
+
+  const endOfWeek = new Date(now.setDate(lastDayOfWeek));
+  endOfWeek.setHours(23, 59, 59, 999);
+
+  return await prisma.transaction.findMany({
+    where: {
+      createdAt: {
+        gte: startOfWeek,
+        lt: endOfWeek,
+      },
+    }
+  })
 }

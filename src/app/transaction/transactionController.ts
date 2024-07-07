@@ -10,6 +10,8 @@ import {
   updateProductService,
 } from "../product/productService";
 import { createMidtransTransaction } from "./midtransService";
+// import { printTransactionService } from "./printService";
+import { printCustomerReceipt } from "./printThermalService";
 import {
   TransactionBodyDTO,
   TransactionDetailDTO,
@@ -21,13 +23,14 @@ import {
   createTransactionService,
   customUpdateStatusTransactionService,
   getHistoryByTransactionIdService,
+  getTodayTransactionService,
   getTransactionByIdService,
   getTransactionDetailByTransactionIdService,
   getTransactionService,
+  getWeekTransactionService,
   handleWebhookTransactionService,
 } from "./transactionService";
-import { IFilterTransaction } from "./transactionTypes";
-import { printTransactionService } from "./printService";
+import { IFilterTransaction, TransactionModelTypes } from "./transactionTypes";
 
 export const createTransactionController = async (
   req: Request,
@@ -121,13 +124,14 @@ export const getTransactionDetailsByTransactionIdController = async (
 };
 export const getTransactionController = async (req: Request, res: Response) => {
   try {
-    const { page, perPage, email, name } = req.query as IFilterTransaction;
+    const { page, perPage, email, name, status } = req.query as IFilterTransaction;
 
     const transactionService = await getTransactionService({
       email,
       name,
       page: Number(page) || undefined,
       perPage: Number(perPage) || undefined,
+      status: status as StatusTransaction || undefined
     });
 
     return HandleResponse(
@@ -350,19 +354,48 @@ export const deleteProductController = async (req: Request, res: Response) => {
   );
 };
 
-export const printTransactionController = async (
+// export const printTransactionController = async (
+//   req: Request,
+//   res: Response
+// ) => {
+//   const { id } = req.body;
+//   const print = await printTransactionService(String(id));
+//   if ((print as HttpError)?.message) {
+//     return HandleResponse(
+//       res,
+//       (print as HttpError).statusCode,
+//       (print as HttpError).code,
+//       (print as HttpError).message
+//     );
+//   }
+//   return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.PRINT);
+// };
+export const printReceiptController = async (
   req: Request,
   res: Response
 ) => {
-  const { id } = req.body;
-  const print = await printTransactionService(String(id));
-  if ((print as HttpError)?.message) {
-    return HandleResponse(
-      res,
-      (print as HttpError).statusCode,
-      (print as HttpError).code,
-      (print as HttpError).message
-    );
-  }
+  const body = req.body as TransactionModelTypes;
+  const print = await printCustomerReceipt(body);
+  // if ((print as HttpError)?.message) {
+  //   return HandleResponse(
+  //     res,
+  //     (print as HttpError).statusCode,
+  //     (print as HttpError).code,
+  //     (print as HttpError).message
+  //   );
+  // }
   return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.PRINT);
 };
+
+
+
+export const getTodayTransactionController = async (req: Request, res: Response) => {
+  const todayTransaction = await getTodayTransactionService();
+
+  return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.TRANSACTION.GET, todayTransaction);
+}
+export const getWeekTransactionController = async (req: Request, res: Response) => {
+  const todayTransaction = await getWeekTransactionService();
+
+  return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.TRANSACTION.GET, todayTransaction);
+}

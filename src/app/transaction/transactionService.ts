@@ -7,7 +7,7 @@ import { Meta } from '../../utils/Meta'
 import { getProductById, updateProductStock } from '../product/productRepo'
 import { TransactionBodyDTO, TransactionDetailDTO } from './transactionDTO'
 import { getTransactionByIdMapper, getTransactionsMapper } from './transactionMapper'
-import { createHistoryBaseOnTransaction, createIncomeByTransaction, createTransaction, createTransactionDetail, getHistoryByTransactionId, getTransaction, getTransactionById, getTransactionCount, getTransactionDetailByTransactionId, updatePaymentTransaction, updateStatusTransaction } from './transactionRepo'
+import { createHistoryBaseOnTransaction, createIncomeByTransaction, createTransaction, createTransactionDetail, getHistoryByTransactionId, getTodayTransaction, getTransaction, getTransactionById, getTransactionCount, getTransactionDetailByTransactionId, getWeekTransaction, updatePaymentTransaction, updateStatusTransaction } from './transactionRepo'
 import { IFilterTransaction, TransactionModelTypes } from './transactionTypes'
 import { createTransactionDetailValidate, createTransactionValidate, updatePaymentTransactionValidate, updateStatusToPaidTransactionValidate } from './transactionValidate'
 
@@ -39,8 +39,9 @@ export const getTransactionDetailByTransactionIdService = async (transactionId: 
 
 }
 
-export const getTransactionService = async ({ email, name, page = 1, perPage = 10 }: IFilterTransaction) => {
-    const transactionData = await getTransaction({ email, name, page, perPage });
+export const getTransactionService = async ({ email, name, page = 1, perPage = 10, status }: IFilterTransaction) => {
+    const filter = { email, name, status: status || undefined, page: Number(page) || undefined, perPage: Number(perPage) || undefined }
+    const transactionData = await getTransaction(filter);
     const [transactions, totalTransaction] = await Promise.all([
         getTransactionsMapper(transactionData as unknown as TransactionModelTypes[]),
         getTransactionCount({ email, name })])
@@ -69,7 +70,6 @@ export const UpdateToPaidTransactionService = async ({ id }: TransactionBodyDTO)
 
 export const getTransactionByIdService = async (id: string) => {
     const transaction = await getTransactionById(id)
-
     if (!transaction) {
         return AppError(MESSAGES.ERROR.NOT_FOUND.TRANSACTION, 404, MESSAGE_CODE.NOT_FOUND)
     }
@@ -130,4 +130,13 @@ export const handleWebhookTransactionService = async (settlementTime: string, si
 
     return null
 
+}
+
+export const getTodayTransactionService = async () => {
+    const getTransaction = await getTodayTransaction()
+    return getTransaction
+}
+export const getWeekTransactionService = async () => {
+    const getTransaction = await getWeekTransaction()
+    return getTransaction
 }
