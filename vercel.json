@@ -2,17 +2,22 @@
   "version": 2,
   "builds": [
     {
-      "src": "package.json",
+      "src": "src/index.ts",
       "use": "@vercel/node",
       "config": {
-        "distDir": "dist"
+        "includeFiles": [
+          "src/**"
+        ],
+        "commands": {
+          "build": "prisma generate && tsc"
+        }
       }
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/"
+      "dest": "src/index.ts"
     }
   ]
 }
