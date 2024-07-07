@@ -1,6 +1,5 @@
 # Gunakan image Node.js sebagai base image
-FROM node:20.11.1
-
+FROM node:18
 # Set work directory
 WORKDIR /src
 
