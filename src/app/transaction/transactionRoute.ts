@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { UpdatePaymentTransactionController, UpdateToPaidTransactionController, createTransactionController, customUpdateStatusTransactionController, getHistoryByTransactionIdController, getTodayTransactionController, getTransactionByIdController, getTransactionController, getTransactionDetailsByTransactionIdController, getWeekTransactionController, handleWebhookTransactionController, printReceiptController, } from "./transactionController";
+import { UpdatePaymentTransactionController, UpdateToPaidTransactionController, createTransactionController, customUpdateStatusTransactionController, getHistoryByTransactionIdController, getTodayTransactionController, getTransactionByIdController, getTransactionController, getTransactionDetailsByTransactionIdController, getWeekTransactionController, handleWebhookTransactionController, printTransactionController, } from "./transactionController";
 
 const route = Router()
 
@@ -14,8 +14,8 @@ route.put("/paid/:transactionId", UpdateToPaidTransactionController)
 route.put("/status/:transactionId", customUpdateStatusTransactionController)
 route.put("/payment/:transactionId", UpdatePaymentTransactionController)
 route.post("/payment", handleWebhookTransactionController)
-// route.post("/print", printTransactionController)
-route.post("/print", printReceiptController)
+route.post("/print", printTransactionController)
+// route.post("/print", printReceiptController)
 route.post('/testing', (req, res) => {
     console.log(req.body)
     return res.json({ message: "Hello World" })
