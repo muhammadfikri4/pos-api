@@ -107,6 +107,7 @@ export const UpdatePaymentTransactionService = async (id: string, totalPaid: num
     }
     const transaction = await getTransactionById(id)
     const updatePayment = await updatePaymentTransaction(id, totalPaid, transaction?.totalAmount as number);
+    await createIncomeByTransaction(id, totalPaid)
     return updatePayment
 }
 
