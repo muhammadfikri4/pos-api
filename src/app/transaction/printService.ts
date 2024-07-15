@@ -74,7 +74,7 @@ export const printTransactionService = async (id: string) => {
 
     const receipt = [];
     receipt.push(initializePrinter);
-    receipt.push(doubleSizeText + "POS Product Receipt" + normalSizeText);
+    receipt.push(doubleSizeText + "Warmindo Kita" + normalSizeText);
     receipt.push(lineSeparator);
     receipt.push(`Tanggal: ${formatDate(transaction.createdAt as Date)}`);
     receipt.push(`Serial: ${transaction.serialNumber}`);
