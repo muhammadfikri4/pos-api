@@ -10,7 +10,7 @@ import {
   updateProductService,
 } from "../product/productService";
 import { createMidtransTransaction } from "./midtransService";
-import { printTransactionService } from "./printService";
+// import { printTransactionService } from "./printService";
 // import { printCustomerReceipt } from "./printThermalService";
 import {
   TransactionBodyDTO,
@@ -354,22 +354,22 @@ export const deleteProductController = async (req: Request, res: Response) => {
   );
 };
 
-export const printTransactionController = async (
-  req: Request,
-  res: Response
-) => {
-  const { id } = req.body;
-  const print = await printTransactionService(String(id));
-  if ((print as HttpError)?.message) {
-    return HandleResponse(
-      res,
-      (print as HttpError).statusCode,
-      (print as HttpError).code,
-      (print as HttpError).message
-    );
-  }
-  return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.PRINT);
-};
+// export const printTransactionController = async (
+//   req: Request,
+//   res: Response
+// ) => {
+//   const { id } = req.body;
+//   const print = await printTransactionService(String(id));
+//   if ((print as HttpError)?.message) {
+//     return HandleResponse(
+//       res,
+//       (print as HttpError).statusCode,
+//       (print as HttpError).code,
+//       (print as HttpError).message
+//     );
+//   }
+//   return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.PRINT);
+// };
 // export const printReceiptController = async (
 //   req: Request,
 //   res: Response
