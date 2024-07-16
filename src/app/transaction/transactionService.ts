@@ -39,12 +39,12 @@ export const getTransactionDetailByTransactionIdService = async (transactionId: 
 
 }
 
-export const getTransactionService = async ({ email, name, page = 1, perPage = 10, status }: IFilterTransaction) => {
-    const filter = { email, name, status: status || undefined, page: Number(page) || undefined, perPage: Number(perPage) || undefined }
+export const getTransactionService = async ({ search, page = 1, perPage = 10, status }: IFilterTransaction) => {
+    const filter = { search, status: status || undefined, page: Number(page) || undefined, perPage: Number(perPage) || undefined }
     const transactionData = await getTransaction(filter);
     const [transactions, totalTransaction] = await Promise.all([
         getTransactionsMapper(transactionData as unknown as TransactionModelTypes[]),
-        getTransactionCount({ email, name, status })])
+        getTransactionCount({ search, status })])
     return { data: transactions, meta: Meta(page, perPage, totalTransaction) }
 }
 

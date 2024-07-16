@@ -51,19 +51,31 @@ export const createTransactionDetail = async ({
 export const getTransaction = async ({
   page,
   perPage,
-  email,
-  name,
+  search,
   status
 }: IFilterTransaction) => {
+
   return await prisma.transaction.findMany({
     where: {
-      email: {
-        contains: email,
-      },
-      name: {
-        contains: name,
-      },
-      status: status || undefined,
+
+
+      OR: [
+        {
+          name: {
+            contains: search,
+            mode: 'insensitive'
+          },
+        },
+        {
+          email: {
+            contains: search,
+            mode: 'insensitive'
+          },
+        }
+      ],
+      AND: {
+        status: status || undefined
+      }
     },
     include: {
       transactionDetails: {
@@ -85,19 +97,28 @@ export const getTransaction = async ({
 };
 
 export const getTransactionCount = async ({
-  name,
-  email,
+  search,
   status
 }: IFilterTransaction) => {
   return await prisma.transaction.count({
     where: {
-      name: {
-        contains: name,
-      },
-      email: {
-        contains: email,
-      },
-      status: status || undefined
+      OR: [
+        {
+          name: {
+            contains: search,
+            mode: 'insensitive'
+          },
+        },
+        {
+          email: {
+            contains: search,
+            mode: 'insensitive'
+          },
+        }
+      ],
+      AND: {
+        status: status || undefined
+      }
     },
   });
 };
