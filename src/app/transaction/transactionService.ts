@@ -39,12 +39,12 @@ export const getTransactionDetailByTransactionIdService = async (transactionId: 
 
 }
 
-export const getTransactionService = async ({ email, name, page = 1, perPage = 10, status }: IFilterTransaction) => {
-    const filter = { email, name, status: status || undefined, page: Number(page) || undefined, perPage: Number(perPage) || undefined }
+export const getTransactionService = async ({ search = '', page = 1, perPage = 10, status }: IFilterTransaction) => {
+    const filter = { search, status: status || undefined, page: Number(page) || undefined, perPage: Number(perPage) || undefined }
     const transactionData = await getTransaction(filter);
     const [transactions, totalTransaction] = await Promise.all([
         getTransactionsMapper(transactionData as unknown as TransactionModelTypes[]),
-        getTransactionCount({ email, name })])
+        getTransactionCount({ search, status })])
     return { data: transactions, meta: Meta(page, perPage, totalTransaction) }
 }
 
@@ -100,14 +100,14 @@ export const customUpdateStatusTransactionService = async (id: string, status: S
     return updateTransaction
 }
 
-export const UpdatePaymentTransactionService = async (id: string, totalPaid: number) => {
+export const UpdatePaymentTransactionService = async (id: string, totalPaid: number, totalAmount: number) => {
     const validate = await updatePaymentTransactionValidate(id, totalPaid)
     if ((validate as HttpError)?.message) {
         return AppError((validate as HttpError).message, (validate as HttpError).statusCode, (validate as HttpError).code)
     }
     const transaction = await getTransactionById(id)
     const updatePayment = await updatePaymentTransaction(id, totalPaid, transaction?.totalAmount as number);
-    await createIncomeByTransaction(id, totalPaid)
+    await createIncomeByTransaction(id, totalAmount)
     return updatePayment
 }
 

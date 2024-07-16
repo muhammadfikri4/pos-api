@@ -47,7 +47,6 @@ export interface TransactionModelTypes {
 export interface IFilterTransaction {
     page?: number,
     perPage?: number,
-    name?: string,
-    email?: string
+    search?: string,
     status?: StatusTransaction
 }

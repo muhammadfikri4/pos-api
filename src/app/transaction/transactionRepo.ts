@@ -51,19 +51,29 @@ export const createTransactionDetail = async ({
 export const getTransaction = async ({
   page,
   perPage,
-  email,
-  name,
+  search,
   status
 }: IFilterTransaction) => {
+
   return await prisma.transaction.findMany({
     where: {
-      email: {
-        contains: email,
-      },
-      name: {
-        contains: name,
-      },
-      status: status || undefined
+      OR: [
+        {
+          name: {
+            contains: search,
+            mode: 'insensitive'
+          },
+        },
+        {
+          email: {
+            contains: search,
+            mode: 'insensitive'
+          },
+        }
+      ],
+      AND: {
+        status: status || undefined
+      }
     },
     include: {
       transactionDetails: {
@@ -76,23 +86,37 @@ export const getTransaction = async ({
         },
       },
     },
+    orderBy: {
+      createdAt: 'desc',
+    },
     take: perPage,
     skip: (Number(page) - 1) * Number(perPage),
   });
 };
 
 export const getTransactionCount = async ({
-  name,
-  email,
+  search,
+  status
 }: IFilterTransaction) => {
   return await prisma.transaction.count({
     where: {
-      name: {
-        contains: name,
-      },
-      email: {
-        contains: email,
-      },
+      OR: [
+        {
+          name: {
+            contains: search,
+            mode: 'insensitive'
+          },
+        },
+        {
+          email: {
+            contains: search,
+            mode: 'insensitive'
+          },
+        }
+      ],
+      AND: {
+        status: status || undefined
+      }
     },
   });
 };
@@ -220,6 +244,9 @@ export const getTodayTransaction = async () => {
         lt: endOfDay,
       },
     },
+    orderBy: {
+      createdAt: 'desc'
+    }
   });
 }
 
@@ -240,6 +267,9 @@ export const getWeekTransaction = async () => {
         gte: startOfWeek,
         lt: endOfWeek,
       },
+    },
+    orderBy: {
+      createdAt: 'desc'
     }
   })
 }
