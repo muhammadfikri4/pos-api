@@ -244,6 +244,9 @@ export const getTodayTransaction = async () => {
         lt: endOfDay,
       },
     },
+    orderBy: {
+      createdAt: 'desc'
+    }
   });
 }
 
@@ -264,6 +267,9 @@ export const getWeekTransaction = async () => {
         gte: startOfWeek,
         lt: endOfWeek,
       },
+    },
+    orderBy: {
+      createdAt: 'desc'
     }
   })
 }
