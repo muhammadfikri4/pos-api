@@ -63,7 +63,7 @@ export const getTransaction = async ({
       name: {
         contains: name,
       },
-      status: status || undefined
+      status: status || undefined,
     },
     include: {
       transactionDetails: {
@@ -75,6 +75,9 @@ export const getTransaction = async ({
           },
         },
       },
+    },
+    orderBy: {
+      createdAt: 'desc',
     },
     take: perPage,
     skip: (Number(page) - 1) * Number(perPage),
