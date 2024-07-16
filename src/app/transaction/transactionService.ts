@@ -100,14 +100,14 @@ export const customUpdateStatusTransactionService = async (id: string, status: S
     return updateTransaction
 }
 
-export const UpdatePaymentTransactionService = async (id: string, totalPaid: number, totalAmount: number) => {
+export const UpdatePaymentTransactionService = async (id: string, totalPaid: number) => {
     const validate = await updatePaymentTransactionValidate(id, totalPaid)
     if ((validate as HttpError)?.message) {
         return AppError((validate as HttpError).message, (validate as HttpError).statusCode, (validate as HttpError).code)
     }
     const transaction = await getTransactionById(id)
     const updatePayment = await updatePaymentTransaction(id, totalPaid, transaction?.totalAmount as number);
-    await createIncomeByTransaction(id, totalAmount)
+    await createIncomeByTransaction(id, transaction?.totalAmount as number)
     return updatePayment
 }
 

@@ -257,8 +257,7 @@ export const UpdatePaymentTransactionController = async (
   const { totalPaid, totalAmount } = req.body;
   const updatePayment = await UpdatePaymentTransactionService(
     transactionId,
-    totalPaid,
-    totalAmount
+    totalPaid
   );
   if ((updatePayment as HttpError)?.message) {
     return HandleResponse(
