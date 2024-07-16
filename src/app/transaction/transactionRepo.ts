@@ -57,8 +57,6 @@ export const getTransaction = async ({
 
   return await prisma.transaction.findMany({
     where: {
-
-
       OR: [
         {
           name: {

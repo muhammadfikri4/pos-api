@@ -39,7 +39,7 @@ export const getTransactionDetailByTransactionIdService = async (transactionId: 
 
 }
 
-export const getTransactionService = async ({ search, page = 1, perPage = 10, status }: IFilterTransaction) => {
+export const getTransactionService = async ({ search = '', page = 1, perPage = 10, status }: IFilterTransaction) => {
     const filter = { search, status: status || undefined, page: Number(page) || undefined, perPage: Number(perPage) || undefined }
     const transactionData = await getTransaction(filter);
     const [transactions, totalTransaction] = await Promise.all([
