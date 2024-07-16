@@ -84,6 +84,7 @@ export const getTransaction = async ({
 export const getTransactionCount = async ({
   name,
   email,
+  status
 }: IFilterTransaction) => {
   return await prisma.transaction.count({
     where: {
@@ -93,6 +94,7 @@ export const getTransactionCount = async ({
       email: {
         contains: email,
       },
+      status: status || undefined
     },
   });
 };

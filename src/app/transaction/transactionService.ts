@@ -44,7 +44,7 @@ export const getTransactionService = async ({ email, name, page = 1, perPage = 1
     const transactionData = await getTransaction(filter);
     const [transactions, totalTransaction] = await Promise.all([
         getTransactionsMapper(transactionData as unknown as TransactionModelTypes[]),
-        getTransactionCount({ email, name })])
+        getTransactionCount({ email, name, status })])
     return { data: transactions, meta: Meta(page, perPage, totalTransaction) }
 }
 
