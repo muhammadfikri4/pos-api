@@ -3,19 +3,19 @@ import { incomeMapper } from "./incomeMapper";
 import { getAllIncome, getIncomeCounts } from "./incomeRepo";
 import { IFilterIncome, IncomeModelTypes } from "./incomeTypes";
 
-export const getIncomeService = async ({ from, page = 1, perPage = 10, to }: IFilterIncome) => {
-    // const today = new Date()
+export const getIncomeService = async ({ date, page = 1, perPage = 10 }: IFilterIncome) => {
+    const today = new Date(date as Date)
 
-    // const firstDayMonth = new Date(Date.UTC(today.getFullYear(), today.getMonth(), 1))
-    // const lastDayMonth = new Date(Date.UTC(today.getFullYear(), today.getMonth() + 1, 0))
-    const first = new Date(from as Date || new Date()).toISOString()
-    const end = new Date(to as Date || new Date()).toISOString()
-    // console.log({ firstDayMonth, lastDayMonth })
+    // Menyesuaikan tanggal awal dan akhir pada hari yang sama
+    const startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0)
+    const endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59)
 
-    const getIncomes = await getAllIncome({ from: from ? first : undefined, page, perPage, to: to ? end : undefined }) as IncomeModelTypes[]
+    console.log({ date, endDate, startDate })
+
+    const getIncomes = await getAllIncome({ startDate: date ? startDate : undefined, endDate: date ? endDate : undefined, page, perPage }) as IncomeModelTypes[]
     const [incomes, totalData] = await Promise.all([
         incomeMapper(getIncomes),
-        getIncomeCounts({ from: from ? first : undefined, to: to ? end : undefined })
+        getIncomeCounts({ startDate: date ? startDate : undefined, endDate: date ? endDate : undefined })
     ])
 
     const data = {

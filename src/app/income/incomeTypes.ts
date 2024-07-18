@@ -3,8 +3,9 @@ import { PaymentMethod } from "@prisma/client"
 export interface IFilterIncome {
     page?: number,
     perPage?: number,
-    from?: string | Date,
-    to?: string | Date
+    date?: string | Date,
+    startDate?: string | Date,
+    endDate?: string | Date
 }
 
 export interface IncomeModelTypes {
