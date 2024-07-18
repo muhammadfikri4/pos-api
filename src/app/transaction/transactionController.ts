@@ -254,7 +254,7 @@ export const UpdatePaymentTransactionController = async (
   res: Response
 ) => {
   const { transactionId } = req.params;
-  const { totalPaid } = req.body;
+  const { totalPaid, totalAmount } = req.body;
   const updatePayment = await UpdatePaymentTransactionService(
     transactionId,
     totalPaid
