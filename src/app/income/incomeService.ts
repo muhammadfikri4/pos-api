@@ -11,7 +11,7 @@ export const getIncomeService = async ({ from, to, page = 1, perPage = 10 }: IFi
 
     // Menyesuaikan tanggal awal dan akhir pada hari yang sama
     const startDate = new Date(fromDate?.getFullYear(), fromDate?.getMonth(), fromDate?.getDate(), 0, 0, 0)
-    const endDate = new Date(toDate?.getFullYear(), toDate?.getMonth(), toDate?.getDate(), 23, 59, 59)
+    const endDate = !to ? new Date(fromDate?.getFullYear(), fromDate?.getMonth(), fromDate?.getDate(), 23, 59, 59) : new Date(toDate?.getFullYear(), toDate?.getMonth(), toDate?.getDate(), 23, 59, 59)
 
 
     const getIncomes = await getAllIncome({ from: from ? startDate : undefined, to: to ? endDate : undefined, page, perPage }) as IncomeModelTypes[]

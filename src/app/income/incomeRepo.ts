@@ -15,7 +15,7 @@ export const getAllIncome = async ({ page, perPage, from, to }: IFilterIncome) =
         where: {
             createdAt: {
                 gte: from,
-                lte: !to && from ? from : to,
+                lte: to,
             },
         },
         orderBy: {
@@ -35,7 +35,7 @@ export const getIncomeCounts = async ({ from, to }: IFilterIncome) => {
         where: {
             createdAt: {
                 gte: from,
-                lte: !to && from ? from : to,
+                lte: to,
                 // equals: date
             },
         },
