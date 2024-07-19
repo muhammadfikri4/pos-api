@@ -18,6 +18,9 @@ export const getAllIncome = async ({ page, perPage, endDate, startDate }: IFilte
                 lte: endDate,
             },
         },
+        orderBy: {
+            createdAt: 'desc'
+        },
         include: {
             transaction: true
         },
