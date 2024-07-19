@@ -7,7 +7,7 @@ import { Meta } from '../../utils/Meta'
 import { getProductById, updateProductStock } from '../product/productRepo'
 import { TransactionBodyDTO, TransactionDetailDTO } from './transactionDTO'
 import { getTransactionByIdMapper, getTransactionsMapper } from './transactionMapper'
-import { createHistoryBaseOnTransaction, createIncomeByTransaction, createTransaction, createTransactionDetail, getHistoryByTransactionId, getTodayTransaction, getTransaction, getTransactionById, getTransactionCount, getTransactionDetailByTransactionId, getWeekTransaction, updatePaymentTransaction, updateStatusTransaction } from './transactionRepo'
+import { cancelTransaction, createHistoryBaseOnTransaction, createIncomeByTransaction, createTransaction, createTransactionDetail, getHistoryByTransactionId, getTodayTransaction, getTransaction, getTransactionById, getTransactionCount, getTransactionDetailByTransactionId, getWeekTransaction, updatePaymentTransaction, updateStatusTransaction } from './transactionRepo'
 import { IFilterTransaction, TransactionModelTypes } from './transactionTypes'
 import { createTransactionDetailValidate, createTransactionValidate, updatePaymentTransactionValidate, updateStatusToPaidTransactionValidate } from './transactionValidate'
 
@@ -147,7 +147,7 @@ export const cancelTransactionService = async (id: string) => {
     if (!transaction) {
         return AppError(MESSAGES.ERROR.NOT_FOUND.TRANSACTION, 404, MESSAGE_CODE.NOT_FOUND)
     }
-    const updateTransaction = await updateStatusTransaction(id, 'CANCEL');
+    const updateTransaction = await cancelTransaction(id);
     await createHistoryBaseOnTransaction(id, 'CANCEL')
     return updateTransaction
 }

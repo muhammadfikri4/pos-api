@@ -273,3 +273,14 @@ export const getWeekTransaction = async () => {
     }
   })
 }
+
+export const cancelTransaction = async (id: string) => {
+  return await prisma.transaction.update({
+    where: {
+      id
+    },
+    data: {
+      status: 'CANCEL'
+    }
+  },)
+}

@@ -401,7 +401,7 @@ export const getWeekTransactionController = async (req: Request, res: Response) 
 }
 
 export const cancelTransactioController = async (req: Request, res: Response) => {
-  const { transactionId } = req.params;
+  const { transactionId } = req.body;
   const cancel = await cancelTransactionService(transactionId);
   if ((cancel as HttpError)?.message) {
     return HandleResponse(
