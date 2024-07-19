@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   UpdatePaymentTransactionController,
   UpdateToPaidTransactionController,
+  cancelTransactioController,
   createTransactionController,
   customUpdateStatusTransactionController,
   getHistoryByTransactionIdController,
@@ -27,6 +28,7 @@ route.get("/now/week", getWeekTransactionController);
 route.get("/history/:transactionId", getHistoryByTransactionIdController);
 route.put("/paid/:transactionId", UpdateToPaidTransactionController);
 route.put("/status/:transactionId", customUpdateStatusTransactionController);
+route.put('/cancel/:transactionId', cancelTransactioController)
 route.put("/payment/:transactionId", UpdatePaymentTransactionController);
 route.post("/payment", handleWebhookTransactionController);
 // route.post("/print", printTransactionController)

@@ -20,6 +20,7 @@ import {
 import {
   UpdatePaymentTransactionService,
   UpdateToPaidTransactionService,
+  cancelTransactionService,
   createTransactionService,
   customUpdateStatusTransactionService,
   getHistoryByTransactionIdService,
@@ -397,4 +398,23 @@ export const getWeekTransactionController = async (req: Request, res: Response) 
   const todayTransaction = await getWeekTransactionService();
 
   return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.TRANSACTION.GET, todayTransaction);
+}
+
+export const cancelTransactioController = async (req: Request, res: Response) => {
+  const { transactionId } = req.params;
+  const cancel = await cancelTransactionService(transactionId);
+  if ((cancel as HttpError)?.message) {
+    return HandleResponse(
+      res,
+      (cancel as HttpError).statusCode,
+      (cancel as HttpError).code,
+      (cancel as HttpError).message
+    );
+  }
+  return HandleResponse(
+    res,
+    200,
+    MESSAGE_CODE.SUCCESS,
+    MESSAGES.SUCCESS.TRANSACTION.CANCEL
+  );
 }

@@ -102,7 +102,7 @@ enum Role {
 enum StatusTransaction {
   PAID
   UNPAID
-  PROCESS_BY_KITCHEN
+  CANCEL
 }
 
 enum PaymentMethod {

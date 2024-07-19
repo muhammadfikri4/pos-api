@@ -141,3 +141,13 @@ export const getWeekTransactionService = async () => {
     const getTransaction = await getWeekTransaction()
     return getTransaction
 }
+
+export const cancelTransactionService = async (id: string) => {
+    const transaction = await getTransactionById(id)
+    if (!transaction) {
+        return AppError(MESSAGES.ERROR.NOT_FOUND.TRANSACTION, 404, MESSAGE_CODE.NOT_FOUND)
+    }
+    const updateTransaction = await updateStatusTransaction(id, 'CANCEL');
+    await createHistoryBaseOnTransaction(id, 'CANCEL')
+    return updateTransaction
+}

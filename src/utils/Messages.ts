@@ -76,7 +76,8 @@ export const MESSAGES = {
             UPDATE: "Success to update transaction",
             UPDATE_STATUS: "Success to update status transaction",
             DELETE: "Success to delete transaction",
-            PAID: "Success to paid transaction"
+            PAID: "Success to paid transaction",
+            CANCEL: "Success to cancel transaction"
         },
         HISTORY: {
             GET: "Success to fetch history"
