@@ -7,6 +7,8 @@ export const getIncomeService = async ({ from, to, page = 1, perPage = 10 }: IFi
     const fromDate = new Date(from as Date)
     const toDate = new Date(to as Date)
 
+
+
     // Menyesuaikan tanggal awal dan akhir pada hari yang sama
     const startDate = new Date(fromDate?.getFullYear(), fromDate?.getMonth(), fromDate?.getDate(), 0, 0, 0)
     const endDate = new Date(toDate?.getFullYear(), toDate?.getMonth(), toDate?.getDate(), 23, 59, 59)
