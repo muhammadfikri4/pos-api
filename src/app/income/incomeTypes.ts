@@ -4,8 +4,8 @@ export interface IFilterIncome {
     page?: number,
     perPage?: number,
     date?: string | Date,
-    startDate?: string | Date,
-    endDate?: string | Date
+    from?: string | Date,
+    to?: string | Date
 }
 
 export interface IncomeModelTypes {

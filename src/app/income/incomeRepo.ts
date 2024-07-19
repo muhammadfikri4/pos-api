@@ -9,13 +9,13 @@ export const getIncomeByTransactionId = async (transactionId: string) => {
     })
 }
 
-export const getAllIncome = async ({ page, perPage, endDate, startDate }: IFilterIncome) => {
+export const getAllIncome = async ({ page, perPage, from, to }: IFilterIncome) => {
 
     return await prisma.income.findMany({
         where: {
             createdAt: {
-                gte: startDate,
-                lte: endDate,
+                gte: from,
+                lte: to,
             },
         },
         orderBy: {
@@ -30,11 +30,13 @@ export const getAllIncome = async ({ page, perPage, endDate, startDate }: IFilte
     })
 }
 
-export const getIncomeCounts = async ({ date }: IFilterIncome) => {
+export const getIncomeCounts = async ({ from, to }: IFilterIncome) => {
     return await prisma.income.count({
         where: {
             createdAt: {
-                equals: date
+                gte: from,
+                lte: to,
+                // equals: date
             },
         },
         orderBy: {
