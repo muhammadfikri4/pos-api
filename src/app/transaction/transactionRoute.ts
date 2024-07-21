@@ -6,6 +6,7 @@ import {
   createTransactionController,
   customUpdateStatusTransactionController,
   getHistoryByTransactionIdController,
+  getMonthTransactionController,
   getTodayTransactionController,
   getTransactionByIdController,
   getTransactionController,
@@ -25,6 +26,7 @@ route.get(
 route.get("/", getTransactionController);
 route.get("/now/today", getTodayTransactionController);
 route.get("/now/week", getWeekTransactionController);
+route.get("/now/month", getMonthTransactionController);
 route.get("/history/:transactionId", getHistoryByTransactionIdController);
 route.put("/paid/:transactionId", UpdateToPaidTransactionController);
 route.put("/status/:transactionId", customUpdateStatusTransactionController);
