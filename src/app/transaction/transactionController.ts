@@ -404,7 +404,7 @@ export const getWeekTransactionController = async (req: Request, res: Response) 
 }
 
 export const getMonthTransactionController = async (req: Request, res: Response) => {
-  const { month } = req.body;
+  const { month } = req.params;
   const monthTransaction = await getMonthTransactionService(Number(month));
 
   return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.TRANSACTION.GET, monthTransaction);
