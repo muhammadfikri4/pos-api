@@ -7,7 +7,7 @@ import { Meta } from '../../utils/Meta'
 import { getProductById, updateProductStock } from '../product/productRepo'
 import { TransactionBodyDTO, TransactionDetailDTO } from './transactionDTO'
 import { getTransactionByIdMapper, getTransactionsMapper } from './transactionMapper'
-import { cancelTransaction, createHistoryBaseOnTransaction, createIncomeByTransaction, createTransaction, createTransactionDetail, getHistoryByTransactionId, getTodayTransaction, getTransaction, getTransactionById, getTransactionCount, getTransactionDetailByTransactionId, getWeekTransaction, updatePaymentTransaction, updateStatusTransaction } from './transactionRepo'
+import { cancelTransaction, createHistoryBaseOnTransaction, createIncomeByTransaction, createTransaction, createTransactionDetail, getHistoryByTransactionId, getMonthTransaction, getTodayTransaction, getTransaction, getTransactionById, getTransactionCount, getTransactionDetailByTransactionId, getWeekTransaction, updatePaymentTransaction, updateStatusTransaction } from './transactionRepo'
 import { IFilterTransaction, TransactionModelTypes } from './transactionTypes'
 import { createTransactionDetailValidate, createTransactionValidate, updatePaymentTransactionValidate, updateStatusToPaidTransactionValidate } from './transactionValidate'
 
@@ -160,6 +160,11 @@ export const getTodayTransactionService = async () => {
 }
 export const getWeekTransactionService = async () => {
     const getTransaction = await getWeekTransaction()
+    return getTransaction
+}
+
+export const getMonthTransactionService = async (month: number) => {
+    const getTransaction = await getMonthTransaction(month)
     return getTransaction
 }
 

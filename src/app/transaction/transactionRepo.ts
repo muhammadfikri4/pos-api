@@ -334,6 +334,30 @@ export const getWeekTransaction = async () => {
   })
 }
 
+export const getMonthTransaction = async (month: number) => {
+  const now = new Date();
+  const year = now.getFullYear();
+
+  // Membuat tanggal awal dan akhir bulan
+  const startOfMonth = new Date(year, month - 1, 1);
+  startOfMonth.setHours(0, 0, 0, 0);
+
+  const endOfMonth = new Date(year, month, 0); // Tanggal 0 berarti hari terakhir dari bulan sebelumnya
+  endOfMonth.setHours(23, 59, 59, 999);
+
+  return await prisma.transaction.findMany({
+    where: {
+      createdAt: {
+        gte: startOfMonth,
+        lt: endOfMonth,
+      },
+    },
+    orderBy: {
+      createdAt: 'desc'
+    }
+  });
+};
+
 export const cancelTransaction = async (id: string) => {
   return await prisma.transaction.update({
     where: {
