@@ -30,6 +30,25 @@ export const getAllIncome = async ({ page, perPage, from, to }: IFilterIncome) =
     })
 }
 
+export const getIncomeDatas = async ({ from, to }: IFilterIncome) => {
+
+    return await prisma.income.findMany({
+        where: {
+            createdAt: {
+                gte: from,
+                lte: to,
+            },
+        },
+        orderBy: {
+            createdAt: 'desc'
+        },
+        include: {
+            transaction: true
+        }
+
+    })
+}
+
 export const getIncomeCounts = async ({ from, to }: IFilterIncome) => {
     return await prisma.income.count({
         where: {

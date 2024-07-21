@@ -52,7 +52,8 @@ export const getTransaction = async ({
   page,
   perPage,
   search,
-  status
+  status,
+  from, to
 }: IFilterTransaction) => {
 
   return await prisma.transaction.findMany({
@@ -73,7 +74,12 @@ export const getTransaction = async ({
       ],
       AND: {
         status: status || undefined
-      }
+      },
+      createdAt: {
+        gte: from,
+        lte: to
+        // equals: date
+      },
     },
     include: {
       transactionDetails: {
@@ -94,9 +100,57 @@ export const getTransaction = async ({
   });
 };
 
+export const getAllTransaction = async ({
+
+  search,
+  status,
+  from, to
+}: IFilterTransaction) => {
+  return await prisma.transaction.findMany({
+    where: {
+      OR: [
+        {
+          name: {
+            contains: search,
+            mode: 'insensitive'
+          },
+        },
+        {
+          email: {
+            contains: search,
+            mode: 'insensitive'
+          },
+        }
+      ],
+      AND: {
+        status: status || undefined
+      },
+      createdAt: {
+        gte: from,
+        lte: to
+        // equals: date
+      },
+    },
+    include: {
+      transactionDetails: {
+        include: {
+          product: {
+            include: {
+              category: true,
+            },
+          },
+        },
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    }
+  });
+}
+
 export const getTransactionCount = async ({
   search,
-  status
+  status,
 }: IFilterTransaction) => {
   return await prisma.transaction.count({
     where: {

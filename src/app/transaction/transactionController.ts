@@ -125,13 +125,15 @@ export const getTransactionDetailsByTransactionIdController = async (
 };
 export const getTransactionController = async (req: Request, res: Response) => {
   try {
-    const { page, perPage, search, status } = req.query as IFilterTransaction;
+    const { page, perPage, search, status, from, to } = req.query as IFilterTransaction;
 
     const transactionService = await getTransactionService({
       search,
       page: Number(page) || undefined,
       perPage: Number(perPage) || undefined,
-      status: status as StatusTransaction || undefined
+      status: status as StatusTransaction || undefined,
+      from: from ? from : undefined,
+      to: to ? to : undefined,
     });
 
     return HandleResponse(

@@ -1,6 +1,6 @@
 import { Meta } from "../../utils/Meta";
 import { incomeMapper } from "./incomeMapper";
-import { getAllIncome, getIncomeCounts } from "./incomeRepo";
+import { getAllIncome, getIncomeCounts, getIncomeDatas } from "./incomeRepo";
 import { IFilterIncome, IncomeModelTypes } from "./incomeTypes";
 
 export const getIncomeService = async ({ from, to, page = 1, perPage = 10 }: IFilterIncome) => {
@@ -14,14 +14,15 @@ export const getIncomeService = async ({ from, to, page = 1, perPage = 10 }: IFi
     const endDate = new Date(toDate?.getFullYear(), toDate?.getMonth(), toDate?.getDate(), 23, 59, 59)
 
     const getIncomes = await getAllIncome({ from: from ? startDate : undefined, to: to ? endDate : undefined, page, perPage }) as IncomeModelTypes[]
-    const [incomes, totalData] = await Promise.all([
+    const [incomes, totalData, datas] = await Promise.all([
         incomeMapper(getIncomes),
-        getIncomeCounts({ from: from ? startDate : undefined, to: to ? endDate : undefined })
+        getIncomeCounts({ from: from ? startDate : undefined, to: to ? endDate : undefined }),
+        getIncomeDatas({ from: from ? startDate : undefined, to: to ? endDate : undefined })
     ])
 
     const data = {
         incomes,
-        totalIncome: incomes.reduce((acc, curr) => acc + curr.nominal, 0)
+        totalIncome: datas.reduce((acc, curr) => acc + curr.nominal, 0)
     }
 
     return {

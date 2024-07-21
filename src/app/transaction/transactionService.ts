@@ -39,8 +39,24 @@ export const getTransactionDetailByTransactionIdService = async (transactionId: 
 
 }
 
-export const getTransactionService = async ({ search = '', page = 1, perPage = 10, status }: IFilterTransaction) => {
-    const filter = { search, status: status || undefined, page: Number(page) || undefined, perPage: Number(perPage) || undefined }
+export const getTransactionService = async ({ search = '', page = 1, perPage = 10, status, from, to }: IFilterTransaction) => {
+    const fromDate = new Date(from as Date)
+    const toDate = new Date(to as Date)
+
+
+
+    // Menyesuaikan tanggal awal dan akhir pada hari yang sama
+    const startDate = new Date(fromDate?.getFullYear(), fromDate?.getMonth(), fromDate?.getDate(), 0, 0, 0)
+    const endDate = new Date(toDate?.getFullYear(), toDate?.getMonth(), toDate?.getDate(), 23, 59, 59)
+
+    const filter = {
+        search,
+        status: status || undefined,
+        page: Number(page) || undefined,
+        perPage: Number(perPage) || undefined,
+        from: from ? startDate : undefined,
+        to: to ? endDate : undefined
+    }
     const transactionData = await getTransaction(filter);
     const [transactions, totalTransaction] = await Promise.all([
         getTransactionsMapper(transactionData as unknown as TransactionModelTypes[]),

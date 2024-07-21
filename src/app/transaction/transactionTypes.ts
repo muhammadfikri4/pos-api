@@ -49,4 +49,6 @@ export interface IFilterTransaction {
     perPage?: number,
     search?: string,
     status?: StatusTransaction
+    from?: string | Date
+    to?: string | Date
 }
