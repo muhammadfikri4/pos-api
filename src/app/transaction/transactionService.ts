@@ -60,13 +60,18 @@ export const getTransactionService = async ({ search = '', page = 1, perPage = 1
     const transactionData = await getTransaction(filter);
     const [transactions, totalTransaction] = await Promise.all([
         getTransactionsMapper(transactionData as unknown as TransactionModelTypes[]),
-        getTransactionCount({ search, status })])
-    return { data: transactions, meta: Meta(page, perPage, totalTransaction) }
+        getTransactionCount({
+            search,
+            status: status || undefined,
+            from: from ? startDate : undefined,
+            to: to ? endDate : undefined
+        })])
+    return { data: transactions, meta: Meta(page, perPage, totalTransaction) };
 }
 
 export const UpdateToPaidTransactionService = async ({ id }: TransactionBodyDTO) => {
 
-    const validate = await updateStatusToPaidTransactionValidate(id as string)
+    const validate = await updateStatusToPaidTransactionValidate(id as string);
 
     if ((validate as HttpError)?.message) {
         return AppError((validate as HttpError).message, (validate as HttpError).statusCode, (validate as HttpError).code)
