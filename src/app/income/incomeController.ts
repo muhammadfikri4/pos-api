@@ -6,10 +6,11 @@ import { getIncomeService } from './incomeService'
 import { IFilterIncome } from './incomeTypes'
 
 export const getIncomeController = async (req: Request, res: Response) => {
-    const { date, page, perPage } = req.query as IFilterIncome
+    const { from, to, page, perPage } = req.query as IFilterIncome
 
     const incomes = await getIncomeService({
-        date: date ? date : undefined,
+        from: from ? from : undefined,
+        to: to ? to : undefined,
         page: page ? Number(page) : undefined,
         perPage: perPage ? Number(perPage) : undefined,
     })
