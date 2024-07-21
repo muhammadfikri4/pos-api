@@ -24,6 +24,7 @@ import {
   createTransactionService,
   customUpdateStatusTransactionService,
   getHistoryByTransactionIdService,
+  getMonthTransactionService,
   getTodayTransactionService,
   getTransactionByIdService,
   getTransactionDetailByTransactionIdService,
@@ -398,6 +399,13 @@ export const getWeekTransactionController = async (req: Request, res: Response) 
   const todayTransaction = await getWeekTransactionService();
 
   return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.TRANSACTION.GET, todayTransaction);
+}
+
+export const getMonthTransactionController = async (req: Request, res: Response) => {
+  const { month } = req.body;
+  const monthTransaction = await getMonthTransactionService(Number(month));
+
+  return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.TRANSACTION.GET, monthTransaction);
 }
 
 export const cancelTransactioController = async (req: Request, res: Response) => {
