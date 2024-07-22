@@ -7,6 +7,7 @@ export const incomeMapper = (incomes: IncomeModelTypes[]): IncomeModelTypes[] =>
         transaction: {
             id: item.transaction.id,
             name: item.transaction.name,
+            email: item.transaction.email,
             paymentMethod: item.transaction.paymentMethod,
             settlementTime: item.transaction.settlementTime,
             totalAmount: item.transaction.totalAmount,

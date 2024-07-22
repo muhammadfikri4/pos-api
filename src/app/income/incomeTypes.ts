@@ -14,6 +14,7 @@ export interface IncomeModelTypes {
     transaction: {
         id: string,
         name: string,
+        email: string
         paymentMethod: PaymentMethod,
         settlementTime: string,
         totalAmount: number,
