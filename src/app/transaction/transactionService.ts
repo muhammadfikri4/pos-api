@@ -4,7 +4,7 @@ import { MESSAGE_CODE } from '../../utils/ErrorCode'
 import { AppError, HttpError } from '../../utils/HttpError'
 import { MESSAGES } from '../../utils/Messages'
 import { Meta } from '../../utils/Meta'
-import { getProductById, updateProductStock } from '../product/productRepo'
+import { getProductById, updateProduct, updateProductStock } from '../product/productRepo'
 import { TransactionBodyDTO, TransactionDetailDTO } from './transactionDTO'
 import { getTransactionByIdMapper, getTransactionsMapper } from './transactionMapper'
 import { cancelTransaction, createHistoryBaseOnTransaction, createIncomeByTransaction, createTransaction, createTransactionDetail, getHistoryByTransactionId, getMonthTransaction, getTodayTransaction, getTransaction, getTransactionById, getTransactionCount, getTransactionDetailByTransactionId, getWeekTransaction, updatePaymentTransaction, updateStatusTransaction } from './transactionRepo'
@@ -19,13 +19,13 @@ export const createTransactionService = async ({ details, email, name, paymentMe
     if ((validateTransaction as HttpError)?.message) {
         return AppError((validateTransaction as HttpError).message, (validateTransaction as HttpError).statusCode, (validateTransaction as HttpError).code)
     }
-    const detailTransaction = details?.map(detail => ({ ...detail, transactionId: transactionCreation.id }))
-    const validateTransactionDetail = await createTransactionDetailValidate(detailTransaction as TransactionDetailDTO[])
+    const validateTransactionDetail = await createTransactionDetailValidate(details as TransactionDetailDTO[])
 
     if ((validateTransactionDetail as HttpError)?.message) {
         return AppError((validateTransactionDetail as HttpError).message, (validateTransactionDetail as HttpError).statusCode, (validateTransactionDetail as HttpError).code)
     }
     const transactionCreation = await createTransaction({ email, name, paymentMethod, details })
+    const detailTransaction = details?.map(detail => ({ ...detail, transactionId: transactionCreation.id }))
 
 
     await createTransactionDetail({ details: detailTransaction })
@@ -129,6 +129,11 @@ export const UpdatePaymentTransactionService = async (id: string, totalPaid: num
     }
     const transaction = await getTransactionById(id)
     const updatePayment = await updatePaymentTransaction(id, totalPaid, transaction?.totalAmount as number);
+    transaction?.transactionDetails?.forEach(async (item) => {
+        const product = await getProductById(item?.productId);
+        await updateProduct({ stock: (product?.stock as number) - (item?.quantity as number), id: product?.id as string })
+    })
+
     await createIncomeByTransaction(id, transaction?.totalAmount as number)
     return updatePayment
 }
