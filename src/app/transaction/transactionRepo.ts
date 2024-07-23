@@ -345,7 +345,7 @@ export const getMonthTransaction = async (month: number) => {
   const endOfMonth = new Date(year, month, 0); // Tanggal 0 berarti hari terakhir dari bulan sebelumnya
   endOfMonth.setHours(23, 59, 59, 999);
 
-  return await prisma.transaction.findMany({
+  return await prisma.income.findMany({
     where: {
       createdAt: {
         gte: startOfMonth,
