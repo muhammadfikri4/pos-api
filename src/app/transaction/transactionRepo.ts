@@ -351,7 +351,6 @@ export const getMonthTransaction = async (month: number) => {
         gte: startOfMonth,
         lt: endOfMonth,
       },
-      status: 'PAID'
     },
     orderBy: {
       createdAt: 'desc'
