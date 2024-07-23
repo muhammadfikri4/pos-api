@@ -295,7 +295,7 @@ export const getTodayTransaction = async () => {
   startOfDay.setHours(0, 0, 0, 0);
 
   const endOfDay = new Date();
-  endOfDay.setHours(23, 59, 59, 999);
+  endOfDay.setHours(23, 59, 59, 999)
 
   return await prisma.transaction.findMany({
     where: {
