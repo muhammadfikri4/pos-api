@@ -258,7 +258,7 @@ export const UpdatePaymentTransactionController = async (
   res: Response
 ) => {
   const { transactionId } = req.params;
-  const { totalPaid, totalAmount } = req.body;
+  const { totalPaid } = req.body;
   const updatePayment = await UpdatePaymentTransactionService(
     transactionId,
     totalPaid
@@ -393,12 +393,20 @@ export const deleteProductController = async (req: Request, res: Response) => {
 
 
 export const getTodayTransactionController = async (req: Request, res: Response) => {
-  const todayTransaction = await getTodayTransactionService();
+  const { page, perPage } = req.query
+  const todayTransaction = await getTodayTransactionService({
+    page: Number(page) || undefined,
+    perPage: Number(perPage) || undefined,
+  });
 
   return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.TRANSACTION.GET, todayTransaction);
 }
 export const getWeekTransactionController = async (req: Request, res: Response) => {
-  const todayTransaction = await getWeekTransactionService();
+  const { page, perPage } = req.query
+  const todayTransaction = await getWeekTransactionService({
+    page: Number(page) || undefined,
+    perPage: Number(perPage) || undefined,
+  });
 
   return HandleResponse(res, 200, MESSAGE_CODE.SUCCESS, MESSAGES.SUCCESS.TRANSACTION.GET, todayTransaction);
 }

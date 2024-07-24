@@ -7,7 +7,7 @@ import { Meta } from '../../utils/Meta'
 import { getProductById, updateProduct, updateProductStock } from '../product/productRepo'
 import { TransactionBodyDTO, TransactionDetailDTO } from './transactionDTO'
 import { getTransactionByIdMapper, getTransactionsMapper } from './transactionMapper'
-import { cancelTransaction, createHistoryBaseOnTransaction, createIncomeByTransaction, createTransaction, createTransactionDetail, getHistoryByTransactionId, getMonthTransaction, getTodayTransaction, getTransaction, getTransactionById, getTransactionCount, getTransactionDetailByTransactionId, getWeekTransaction, updatePaymentTransaction, updateStatusTransaction } from './transactionRepo'
+import { cancelTransaction, createHistoryBaseOnTransaction, createIncomeByTransaction, createTransaction, createTransactionDetail, getHistoryByTransactionId, getMonthTransaction, getTodayTransaction, getTodayTransactionCount, getTransaction, getTransactionById, getTransactionCount, getTransactionDetailByTransactionId, getWeekTransaction, getWeekTransactionCount, updatePaymentTransaction, updateStatusTransaction } from './transactionRepo'
 import { IFilterTransaction, TransactionModelTypes } from './transactionTypes'
 import { createTransactionDetailValidate, createTransactionValidate, updatePaymentTransactionValidate, updateStatusToPaidTransactionValidate } from './transactionValidate'
 
@@ -160,13 +160,13 @@ export const handleWebhookTransactionService = async (settlementTime: string, si
 
 }
 
-export const getTodayTransactionService = async () => {
-    const getTransaction = await getTodayTransaction()
-    return getTransaction
+export const getTodayTransactionService = async ({ page = 1, perPage = 10 }: IFilterTransaction) => {
+    const [transactions, totalData] = await Promise.all([getTodayTransaction({ page, perPage }), getTodayTransactionCount()])
+    return { data: transactions, meta: Meta(page, perPage, totalData) }
 }
-export const getWeekTransactionService = async () => {
-    const getTransaction = await getWeekTransaction()
-    return getTransaction
+export const getWeekTransactionService = async ({ page = 1, perPage = 10 }: IFilterTransaction) => {
+    const [transactions, totalData] = await Promise.all([getWeekTransaction({ page, perPage }), getWeekTransactionCount()])
+    return { data: transactions, meta: Meta(page, perPage, totalData) }
 }
 
 export const getMonthTransactionService = async (month: number) => {

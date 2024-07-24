@@ -290,14 +290,35 @@ export const updatePaymentTransaction = async (
   });
 }
 
-export const getTodayTransaction = async () => {
+export const getTodayTransaction = async ({ page, perPage }: IFilterTransaction) => {
   const startOfDay = new Date();
-  startOfDay.setHours(0, 0, 0, 0);
+  startOfDay.setHours(0, 0, 0);
 
   const endOfDay = new Date();
-  endOfDay.setHours(23, 59, 59, 999)
+  endOfDay.setHours(23, 59, 59)
 
   return await prisma.transaction.findMany({
+    where: {
+      createdAt: {
+        gte: startOfDay,
+        lt: endOfDay,
+      },
+    },
+    orderBy: {
+      createdAt: 'desc'
+    },
+    take: perPage,
+    skip: (Number(page) - 1) * Number(perPage),
+  });
+}
+export const getTodayTransactionCount = async () => {
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0);
+
+  const endOfDay = new Date();
+  endOfDay.setHours(23, 59, 59)
+
+  return await prisma.transaction.count({
     where: {
       createdAt: {
         gte: startOfDay,
@@ -310,7 +331,7 @@ export const getTodayTransaction = async () => {
   });
 }
 
-export const getWeekTransaction = async () => {
+export const getWeekTransaction = async ({ page, perPage }: IFilterTransaction) => {
   const now = new Date();
   const firstDayOfWeek = now.getDate() - now.getDay();
   const lastDayOfWeek = firstDayOfWeek + 6;
@@ -330,7 +351,33 @@ export const getWeekTransaction = async () => {
     },
     orderBy: {
       createdAt: 'desc'
-    }
+    },
+    take: perPage,
+    skip: (Number(page) - 1) * Number(perPage),
+  })
+}
+export const getWeekTransactionCount = async () => {
+  const now = new Date();
+  const firstDayOfWeek = now.getDate() - now.getDay();
+  const lastDayOfWeek = firstDayOfWeek + 6;
+
+  const startOfWeek = new Date(now.setDate(firstDayOfWeek));
+  startOfWeek.setHours(0, 0, 0, 0);
+
+  const endOfWeek = new Date(now.setDate(lastDayOfWeek));
+  endOfWeek.setHours(23, 59, 59, 999);
+
+  return await prisma.transaction.count({
+    where: {
+      createdAt: {
+        gte: startOfWeek,
+        lt: endOfWeek,
+      },
+    },
+    orderBy: {
+      createdAt: 'desc'
+    },
+
   })
 }
 
