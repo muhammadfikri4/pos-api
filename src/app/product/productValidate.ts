@@ -37,7 +37,7 @@ export const createProductValidate = async ({ name, categoryId, image, stock }: 
 
 
 }
-export const updateProductValidate = async ({ name, id, image }: ProductBodyDTO, size: number) => {
+export const updateProductValidate = async ({ name, id }: ProductBodyDTO, size: number) => {
     const findUnique = await getProductById(id)
     if (!findUnique) {
         return AppError(MESSAGES.ERROR.NOT_FOUND.PRODUCT, 404, MESSAGE_CODE.NOT_FOUND)
