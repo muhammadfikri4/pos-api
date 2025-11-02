@@ -5,7 +5,7 @@ import { TransactionBodyDTO, TransactionDetailDTO } from "./transactionDTO";
 import { deleteTransaction } from "./transactionRepo";
 
 const snap = new Midtrans.Snap({
-  isProduction: true,
+  isProduction: JSON.parse(ENV.IS_PRODUCTION),
   serverKey: ENV.MIDTRANS_SERVER_KEY as string,
   clientKey: ENV.MIDTRANS_CLIENT_KEY as string,
 });
@@ -16,20 +16,20 @@ export const createMidtransTransaction = async (
   name: string,
   email: string
 ) => {
-
   try {
-    const itemDetails = await Promise.all(details.map(async (item: TransactionDetailDTO) => {
-      const getById = await getProductById(item.productId)
-      if (getById) {
-
-        return {
-          id: item?.productId,
-          price: getById?.price,
-          quantity: item.quantity,
-          name: getById?.name
+    const itemDetails = await Promise.all(
+      details.map(async (item: TransactionDetailDTO) => {
+        const getById = await getProductById(item.productId);
+        if (getById) {
+          return {
+            id: item?.productId,
+            price: getById?.price,
+            quantity: item.quantity,
+            name: getById?.name,
+          };
         }
-      }
-    }))
+      })
+    );
     const parameter = {
       transaction_id: transaction.id,
       transaction_details: {
@@ -44,18 +44,18 @@ export const createMidtransTransaction = async (
       payment_type: "qris",
     };
     const midtransTransaction = await snap.createTransaction(parameter);
-    console.time("createMidtransTransaction")
+    console.time("createMidtransTransaction");
     return {
       token: midtransTransaction.token,
       redirect_url: `${midtransTransaction.redirect_url}#/other-qris`,
     };
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error creating Midtrans transaction:", error);
-    await deleteTransaction(transaction?.id as string)
+    await deleteTransaction(transaction?.id as string);
     return {
       statusCode: 500,
       code: "INTERNAL_SERVER_ERROR",
-      message: "Failed to create Midtrans transaction"
+      message: "Failed to create Midtrans transaction",
     };
   }
 };
